@@ -86,7 +86,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-3 mt-8">
               <div className="rounded-2xl overflow-hidden h-40 shadow-sm">
-                <img src="/galeria/arreglo-floral-03.jpg" alt="Arreglos" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                <img src="/galeria/arreglo-floral-03.jpg" alt="Arreglos" className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="rounded-2xl overflow-hidden flex-1 shadow-brand">
                 <img src="/galeria/regalo-01.jpg" alt="Regalos" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
