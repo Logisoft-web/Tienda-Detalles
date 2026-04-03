@@ -47,7 +47,7 @@ export default function PublicLayout() {
       <footer className="bg-dark text-white pt-12 pb-6 mt-20">
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           <div>
-            <img src="/galeria/Logo.png" alt="Hecho con Amor" className="h-14 w-auto object-contain mb-4 brightness-0 invert" />
+            <img src="/galeria/Logo.png" alt="Hecho con Amor" className="h-14 w-auto object-contain mb-4" />
             <p className="text-gray-400 text-sm leading-relaxed">
               Tienda de detalles para toda ocasión. Flores eternas, peluches y accesorios únicos.
             </p>
