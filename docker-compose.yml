@@ -5,14 +5,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:4005/api
     container_name: hecho-con-amor-frontend
     restart: unless-stopped
     ports:
       - "3005:80"
     depends_on:
       - backend
-    environment:
-      - VITE_API_URL=http://backend:4000
 
   backend:
     build:
