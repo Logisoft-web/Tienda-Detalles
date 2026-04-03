@@ -44,7 +44,7 @@ export default function Login() {
               <div className="relative z-10">
                 {/* Logo */}
                 <div className="bg-white rounded-2xl p-3 w-fit mb-6 shadow-sm">
-                  <img src="/galeria/Logo.png" alt="Hecho con Amor" className="h-12 w-auto object-contain" />
+                  <img src="/galeria/Logo.png" alt="Hecho con Amor" className="h-16 w-16 object-cover rounded-xl" />
                 </div>
                 <h1 className="font-display text-3xl font-bold mb-2 leading-tight">
                   Hecho con Amor
