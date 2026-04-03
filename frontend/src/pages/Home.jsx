@@ -15,17 +15,17 @@ const CAT_LABELS  = {
 // Galería con las fotos reales
 const GALERIA = [
   { src: '/galeria/flores-eternas-01.jpg', label: 'Flores Eternas' },
-  { src: '/galeria/arreglo-floral-01.jpg', label: 'Arreglo Floral' },
   { src: '/galeria/peluche-01.jpg',        label: 'Peluches' },
   { src: '/galeria/regalo-01.jpg',         label: 'Regalos' },
   { src: '/galeria/accesorio-01.jpg',      label: 'Accesorios' },
   { src: '/galeria/detalle-01.jpg',        label: 'Detalles' },
   { src: '/galeria/flores-eternas-02.jpg', label: 'Flores Eternas' },
-  { src: '/galeria/arreglo-floral-02.jpg', label: 'Arreglo Floral' },
+  { src: '/galeria/arreglo-floral-03.jpg', label: 'Arreglo Floral' },
   { src: '/galeria/peluche-02.jpg',        label: 'Peluches' },
   { src: '/galeria/regalo-02.jpg',         label: 'Regalos' },
   { src: '/galeria/accesorio-02.jpg',      label: 'Accesorios' },
   { src: '/galeria/detalle-02.jpg',        label: 'Detalles' },
+  { src: '/galeria/arreglo-floral-04.jpg', label: 'Arreglo Floral' },
 ]
 
 export default function Home() {
@@ -86,7 +86,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-3 mt-8">
               <div className="rounded-2xl overflow-hidden h-40 shadow-sm">
-                <img src="/galeria/arreglo-floral-01.jpg" alt="Arreglos" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                <img src="/galeria/arreglo-floral-03.jpg" alt="Arreglos" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="rounded-2xl overflow-hidden flex-1 shadow-brand">
                 <img src="/galeria/regalo-01.jpg" alt="Regalos" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
