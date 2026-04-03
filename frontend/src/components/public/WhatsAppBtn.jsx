@@ -1,5 +1,5 @@
-const WA_NUMBER = '573001234567' // Reemplazar con número real
-const WA_MSG = encodeURIComponent('Hola! Me interesa una decoración 🎀')
+const WA_NUMBER = '573212126285'
+const WA_MSG = encodeURIComponent('Hola! Me interesa conocer sus productos 🌸')
 
 export default function WhatsAppBtn() {
   return (

@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS services (
   id          SERIAL PRIMARY KEY,
   name        VARCHAR(120) NOT NULL,
-  category    VARCHAR(50)  NOT NULL CHECK (category IN ('globos','decoracion','desayunos','propuestas')),
+  category    VARCHAR(50)  NOT NULL CHECK (category IN ('flores','peluches','accesorios','regalos','globos','decoracion','desayunos','propuestas')),
   price       NUMERIC(12,2) NOT NULL,
   image_url   TEXT,
   description TEXT,
@@ -57,10 +57,13 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- ── Datos de ejemplo ──────────────────────────────────────────
 INSERT INTO services (name, category, price, description, image_url) VALUES
-  ('Arco de Globos',          'globos',     150000, 'Arco decorativo con globos de colores personalizados',          'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80'),
-  ('Decoración de Habitación','decoracion', 280000, 'Decoración romántica completa con globos, pétalos y luces',     'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80'),
-  ('Desayuno Sorpresa',       'desayunos',   95000, 'Desayuno gourmet con decoración y mensaje personalizado',       'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80'),
-  ('Propuesta de Matrimonio', 'propuestas', 450000, 'Decoración especial para la propuesta más importante',          'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=400&q=80'),
-  ('Globos Número',           'globos',      45000, 'Globos metálicos en forma de número, dorados o rosados',        'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&q=80'),
-  ('Caja de Rosas',           'desayunos',  120000, 'Caja elegante con rosas naturales preservadas',                 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400&q=80')
+  ('Flores Eternas Rosas',      'flores',    85000,  'Rosas preservadas que duran años sin perder su belleza natural',           '/galeria/flores-eternas-01.jpg'),
+  ('Arreglo Floral Premium',    'flores',    120000, 'Arreglo con flores eternas en caja elegante, ideal para regalar',          '/galeria/arreglo-floral-01.jpg'),
+  ('Flores Eternas Mixtas',     'flores',    95000,  'Combinación de flores eternas en colores variados, presentación especial', '/galeria/flores-eternas-02.jpg'),
+  ('Peluche Oso Grande',        'peluches',  65000,  'Oso de peluche suave y adorable, perfecto para toda ocasión',             '/galeria/peluche-01.jpg'),
+  ('Peluche Personalizado',     'peluches',  75000,  'Peluche premium con lazo y mensaje personalizado',                        '/galeria/peluche-02.jpg'),
+  ('Accesorio Especial',        'accesorios',45000,  'Accesorio único y elegante para complementar cualquier regalo',           '/galeria/accesorio-01.jpg'),
+  ('Set de Accesorios',         'accesorios',80000,  'Conjunto de accesorios seleccionados para una ocasión especial',          '/galeria/accesorio-02.jpg'),
+  ('Caja Regalo Sorpresa',      'regalos',   110000, 'Caja decorada con productos seleccionados para sorprender',               '/galeria/regalo-01.jpg'),
+  ('Detalle Romántico',         'regalos',   90000,  'Detalle especial para celebrar el amor en cualquier momento',             '/galeria/detalle-01.jpg')
 ON CONFLICT DO NOTHING;
