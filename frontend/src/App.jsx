@@ -7,6 +7,7 @@ import AdminDashboard from './pages/admin/Dashboard'
 import AdminCalendar from './pages/admin/Calendar'
 import AdminQuoter from './pages/admin/Quoter'
 import AdminAccounting from './pages/admin/Accounting'
+import AdminUsers from './pages/admin/Users'
 import Login from './pages/Login'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="calendar" element={<AdminCalendar />} />
           <Route path="quoter" element={<AdminQuoter />} />
           <Route path="accounting" element={<AdminAccounting />} />
+          <Route path="users" element={<AdminUsers />} />
         </Route>
       </Routes>
     </AuthProvider>

@@ -1,4 +1,5 @@
 import pool from '../config/database.js'
+import { audit } from '../utils/audit.js'
 
 export async function getAll(req, res) {
   try {
@@ -15,6 +16,7 @@ export async function create(req, res) {
       'INSERT INTO transactions (type,category,amount,description,date) VALUES ($1,$2,$3,$4,$5) RETURNING *',
       [type, category, amount, description, date]
     )
+    await audit(req.user, `crear_transaccion_${type}`, 'transactions', rows[0].id, `${category} $${amount}`)
     res.status(201).json(rows[0])
   } catch (err) { res.status(500).json({ error: err.message }) }
 }

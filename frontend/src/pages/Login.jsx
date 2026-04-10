@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
-  const [form, setForm] = useState({ email: '', password: '' })
+  const [form, setForm] = useState({ username: '', password: '' })
   const [showPwd, setShowPwd] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     try {
-      await login(form.email, form.password)
+      await login(form.username, form.password)
       toast.success('¡Bienvenida! 🌸')
       navigate('/admin')
     } catch (err) {
@@ -79,17 +79,17 @@ export default function Login() {
                 {/* Email */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-body font-bold text-gray-400 uppercase tracking-widest ml-1">
-                    Correo
+                    Usuario
                   </label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-300 group-focus-within:text-brand-500 transition-colors">
                       <Mail className="w-4 h-4" />
                     </div>
                     <input
-                      type="email" required
-                      value={form.email}
-                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                      placeholder="admin@hechoconamor.com"
+                      type="text" required
+                      value={form.username}
+                      onChange={e => setForm(f => ({ ...f, username: e.target.value }))}
+                      placeholder="usuario"
                       className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-brand-500/10 focus:border-brand-400 outline-none transition-all text-dark text-sm font-body placeholder:text-gray-300"
                     />
                   </div>

@@ -1,4 +1,5 @@
 import pool from '../config/database.js'
+import { audit } from '../utils/audit.js'
 
 export async function getAll(req, res) {
   try {
@@ -15,6 +16,7 @@ export async function create(req, res) {
       'INSERT INTO services (name,category,price,description,image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *',
       [name, category, price, description, image_url]
     )
+    await audit(req.user, 'crear_producto', 'services', rows[0].id, name)
     res.status(201).json(rows[0])
   } catch (err) { res.status(500).json({ error: err.message }) }
 }
@@ -28,6 +30,7 @@ export async function update(req, res) {
       [name, category, price, description, image_url, active ?? true, id]
     )
     if (!rows[0]) return res.status(404).json({ error: 'No encontrado' })
+    await audit(req.user, 'editar_producto', 'services', parseInt(id), name)
     res.json(rows[0])
   } catch (err) { res.status(500).json({ error: err.message }) }
 }
@@ -35,6 +38,7 @@ export async function update(req, res) {
 export async function remove(req, res) {
   try {
     await pool.query('UPDATE services SET active=false WHERE id=$1', [req.params.id])
+    await audit(req.user, 'eliminar_producto', 'services', parseInt(req.params.id))
     res.json({ ok: true })
   } catch (err) { res.status(500).json({ error: err.message }) }
 }

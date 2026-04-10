@@ -1,6 +1,6 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { LayoutDashboard, CalendarDays, FileText, DollarSign, LogOut, Heart, Menu, X } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, FileText, DollarSign, LogOut, Heart, Menu, X, Users } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import clsx from 'clsx'
 
@@ -9,6 +9,10 @@ const NAV = [
   { to: '/admin/calendar',   label: 'Calendario',   icon: CalendarDays },
   { to: '/admin/quoter',     label: 'Cotizador',    icon: FileText },
   { to: '/admin/accounting', label: 'Contabilidad', icon: DollarSign },
+]
+
+const NAV_SUPER = [
+  { to: '/admin/users', label: 'Usuarios', icon: Users },
 ]
 
 export default function AdminLayout() {
@@ -32,6 +36,23 @@ export default function AdminLayout() {
           <span>{label}</span>
         </NavLink>
       ))}
+      {user?.role === 'superadmin' && (
+        <>
+          <div className="px-4 pt-3 pb-1 text-xs text-gray-300 uppercase tracking-widest">Superadmin</div>
+          {NAV_SUPER.map(({ to, label, icon: Icon }) => (
+            <NavLink
+              key={to} to={to} onClick={onClick}
+              className={({ isActive }) => clsx(
+                'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
+                isActive ? 'bg-rose-500 text-white shadow-md' : 'text-gray-600 hover:bg-rose-50 hover:text-rose-600'
+              )}
+            >
+              <Icon size={18} />
+              <span>{label}</span>
+            </NavLink>
+          ))}
+        </>
+      )}
     </>
   )
 
@@ -45,7 +66,7 @@ export default function AdminLayout() {
         </div>
         <NavItems />
         <div className="mt-auto pt-4 border-t border-rose-100">
-          <p className="text-xs text-gray-400 px-4 mb-2">{user?.name}</p>
+          <p className="text-xs text-gray-400 px-4 mb-2">{user?.name} <span className="text-gray-300">({user?.role})</span></p>
           <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-sm text-gray-500 hover:bg-red-50 hover:text-red-500 transition-all">
             <LogOut size={18} /> Cerrar sesión
           </button>

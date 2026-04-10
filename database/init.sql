@@ -49,10 +49,22 @@ CREATE TABLE IF NOT EXISTS transactions (
 CREATE TABLE IF NOT EXISTS users (
   id           SERIAL PRIMARY KEY,
   name         VARCHAR(120) NOT NULL,
-  email        VARCHAR(150) UNIQUE NOT NULL,
+  username     VARCHAR(80)  UNIQUE NOT NULL,
   password     VARCHAR(255) NOT NULL,
-  role         VARCHAR(20) DEFAULT 'admin',
-  created_at   TIMESTAMPTZ DEFAULT NOW()
+  role         VARCHAR(20)  DEFAULT 'admin' CHECK (role IN ('superadmin','admin')),
+  active       BOOLEAN      DEFAULT TRUE,
+  created_at   TIMESTAMPTZ  DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS audit_log (
+  id          SERIAL PRIMARY KEY,
+  user_id     INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  username    VARCHAR(80),
+  action      VARCHAR(80) NOT NULL,
+  entity      VARCHAR(80),
+  entity_id   INTEGER,
+  detail      TEXT,
+  created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Datos de ejemplo ──────────────────────────────────────────

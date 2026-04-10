@@ -20,27 +20,33 @@ async function request(path, options = {}) {
 
 export const api = {
   // Auth
-  login:   (body) => request('/auth/login',    { method: 'POST', body: JSON.stringify(body) }),
-  register:(body) => request('/auth/register', { method: 'POST', body: JSON.stringify(body) }),
+  login: (body) => request('/auth/login', { method: 'POST', body: JSON.stringify(body) }),
 
-  // Services (público GET, resto requiere auth)
-  getServices:    ()     => request('/services'),
-  createService:  (body) => request('/services',     { method: 'POST',   body: JSON.stringify(body) }),
-  updateService:  (id, b)=> request(`/services/${id}`,{ method: 'PUT',   body: JSON.stringify(b) }),
-  deleteService:  (id)   => request(`/services/${id}`,{ method: 'DELETE' }),
+  // Services
+  getServices:    ()      => request('/services'),
+  createService:  (body)  => request('/services',          { method: 'POST',   body: JSON.stringify(body) }),
+  updateService:  (id, b) => request(`/services/${id}`,    { method: 'PUT',    body: JSON.stringify(b) }),
+  deleteService:  (id)    => request(`/services/${id}`,    { method: 'DELETE' }),
 
   // Quotes
-  getQuotes:      ()     => request('/quotes'),
-  createQuote:    (body) => request('/quotes',       { method: 'POST',   body: JSON.stringify(body) }),
-  updateQuoteStatus:(id,s)=>request(`/quotes/${id}/status`,{ method:'PATCH', body: JSON.stringify({ status: s }) }),
+  getQuotes:        ()      => request('/quotes'),
+  createQuote:      (body)  => request('/quotes',          { method: 'POST',   body: JSON.stringify(body) }),
+  updateQuoteStatus:(id, s) => request(`/quotes/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: s }) }),
 
   // Events
-  getEvents:      ()     => request('/events'),
-  createEvent:    (body) => request('/events',       { method: 'POST',   body: JSON.stringify(body) }),
-  deleteEvent:    (id)   => request(`/events/${id}`, { method: 'DELETE' }),
+  getEvents:    ()      => request('/events'),
+  createEvent:  (body)  => request('/events',              { method: 'POST',   body: JSON.stringify(body) }),
+  deleteEvent:  (id)    => request(`/events/${id}`,        { method: 'DELETE' }),
 
   // Transactions
-  getTransactions:()     => request('/transactions'),
-  getSummary:     ()     => request('/transactions/summary'),
-  createTransaction:(body)=>request('/transactions', { method: 'POST',   body: JSON.stringify(body) }),
+  getTransactions:    ()      => request('/transactions'),
+  getSummary:         ()      => request('/transactions/summary'),
+  createTransaction:  (body)  => request('/transactions',  { method: 'POST',   body: JSON.stringify(body) }),
+
+  // Users (solo superadmin)
+  getUsers:     ()      => request('/users'),
+  createUser:   (body)  => request('/users',               { method: 'POST',   body: JSON.stringify(body) }),
+  toggleUser:   (id)    => request(`/users/${id}/toggle`,  { method: 'PATCH' }),
+  deleteUser:   (id)    => request(`/users/${id}`,         { method: 'DELETE' }),
+  getAuditLog:  ()      => request('/users/audit'),
 }

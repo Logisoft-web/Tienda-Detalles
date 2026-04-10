@@ -1,4 +1,5 @@
 import pool from '../config/database.js'
+import { audit } from '../utils/audit.js'
 
 export async function getAll(req, res) {
   try {
@@ -15,6 +16,7 @@ export async function create(req, res) {
       'INSERT INTO quotes (client_name,client_phone,event_date,event_type,services,total,notes) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
       [client_name, client_phone, event_date, event_type, JSON.stringify(services || []), total || 0, notes]
     )
+    await audit(req.user, 'crear_cotizacion', 'quotes', rows[0].id, client_name)
     res.status(201).json(rows[0])
   } catch (err) { res.status(500).json({ error: err.message }) }
 }
@@ -27,6 +29,7 @@ export async function updateStatus(req, res) {
   try {
     const { rows } = await pool.query('UPDATE quotes SET status=$1 WHERE id=$2 RETURNING *', [status, id])
     if (!rows[0]) return res.status(404).json({ error: 'No encontrado' })
+    await audit(req.user, `cotizacion_${status}`, 'quotes', parseInt(id), rows[0].client_name)
     res.json(rows[0])
   } catch (err) { res.status(500).json({ error: err.message }) }
 }
