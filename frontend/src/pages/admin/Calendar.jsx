@@ -67,7 +67,7 @@ export default function AdminCalendar() {
         total_value: form.total_value ? parseFloat(form.total_value) : null,
         amount_paid: form.amount_paid ? parseFloat(form.amount_paid) : 0,
       }
-      await api.createEvent(payload)
+      const newEvent = await api.createEvent(payload)
 
       if (payload.amount_paid > 0) {
         const saldo = payload.total_value ? payload.total_value - payload.amount_paid : 0
@@ -77,6 +77,7 @@ export default function AdminCalendar() {
           amount: payload.amount_paid,
           description: `${saldo > 0 ? 'Abono' : 'Pago'}: ${form.title}${form.client_name ? ` — ${form.client_name}` : ''}${saldo > 0 ? ` (saldo: ${fmt(saldo)})` : ''}`,
           date: modal.date.toISOString().slice(0, 10),
+          event_id: newEvent.id,
         })
       }
 
@@ -115,6 +116,7 @@ export default function AdminCalendar() {
         amount,
         description: `${saldo > 0 ? 'Abono' : 'Pago final'}: ${ev.title}${ev.client_name ? ` — ${ev.client_name}` : ''}${saldo > 0 ? ` (saldo: ${fmt(saldo)})` : ' ✅ Saldado'}`,
         date: ev.event_date?.slice(0, 10) || new Date().toISOString().slice(0, 10),
+        event_id: ev.id,
       })
       toast.success(saldo > 0 ? `💰 Abono registrado. Saldo: ${fmt(saldo)}` : '✅ Evento saldado completamente')
       setAbonoAmount('')

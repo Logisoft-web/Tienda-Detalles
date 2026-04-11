@@ -9,14 +9,14 @@ export async function getAll(req, res) {
 }
 
 export async function create(req, res) {
-  const { type, category, amount, description, date } = req.body
+  const { type, category, amount, description, date, event_id } = req.body
   if (!type || !category || !amount || !date) return res.status(400).json({ error: 'Campos requeridos' })
   try {
     const { rows } = await pool.query(
-      'INSERT INTO transactions (type,category,amount,description,date) VALUES ($1,$2,$3,$4,$5) RETURNING *',
-      [type, category, amount, description, date]
+      'INSERT INTO transactions (type,category,amount,description,date,event_id) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *',
+      [type, category, amount, description, date, event_id || null]
     )
-    await audit(req.user, `crear_transaccion_${type}`, 'transactions', rows[0].id, `${category} $${amount}`)
+    await audit(req.user, `crear_transaccion_${type}`, 'transactions', rows[0].id, `${category} ${amount}`)
     res.status(201).json(rows[0])
   } catch (err) { res.status(500).json({ error: err.message }) }
 }

@@ -43,8 +43,12 @@ CREATE TABLE IF NOT EXISTS transactions (
   amount      NUMERIC(12,2) NOT NULL,
   description TEXT,
   date        DATE NOT NULL,
+  event_id    INTEGER,
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migración: agregar event_id si no existe (para bases de datos ya creadas)
+ALTER TABLE transactions ADD COLUMN IF NOT EXISTS event_id INTEGER;
 
 CREATE TABLE IF NOT EXISTS users (
   id           SERIAL PRIMARY KEY,

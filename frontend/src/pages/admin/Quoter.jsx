@@ -77,7 +77,7 @@ export default function AdminQuoter() {
       await api.updateQuoteStatus(q.id, 'confirmed')
       const total_value = confirmForm.total_value ? parseFloat(confirmForm.total_value) : Number(q.total)
       const amount_paid = confirmForm.amount_paid ? parseFloat(confirmForm.amount_paid) : 0
-      await api.createEvent({
+      const newEvent = await api.createEvent({
         title: `${q.event_type || 'Pedido'} — ${q.client_name}`,
         client_name: q.client_name,
         event_date: new Date(q.event_date).toISOString(),
@@ -87,7 +87,7 @@ export default function AdminQuoter() {
         total_value,
         amount_paid,
       })
-      // Si hay abono, registrar en contabilidad
+      // Si hay abono, registrar en contabilidad vinculado al evento
       if (amount_paid > 0) {
         const saldo = total_value - amount_paid
         await api.createTransaction({
@@ -96,6 +96,7 @@ export default function AdminQuoter() {
           amount: amount_paid,
           description: `Abono: ${q.event_type || 'Pedido'} — ${q.client_name}${saldo > 0 ? ` (saldo: $${fmt(saldo)})` : ''}`,
           date: q.event_date?.slice(0, 10) || new Date().toISOString().slice(0, 10),
+          event_id: newEvent.id,
         })
       }
       toast.success('✅ Confirmada y agregada al calendario')
