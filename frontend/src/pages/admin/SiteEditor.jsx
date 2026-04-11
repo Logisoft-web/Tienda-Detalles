@@ -124,7 +124,7 @@ export default function SiteEditor() {
                 style={{ aspectRatio: i === 0 || i === 3 ? '1/1.2' : '1/0.7' }}>
                 {config.hero_images[i] ? (
                   <>
-                    <img src={config.hero_images[i]} alt="" className="w-full h-full object-cover" />
+                    <img src={config.hero_images[i]} alt="" className="w-full h-full object-contain p-1" />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
                       <span className="text-white text-xs font-bold bg-black/50 px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                         Cambiar foto

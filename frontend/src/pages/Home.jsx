@@ -78,19 +78,19 @@ export default function Home() {
           {/* Collage de fotos */}
           <div className="hidden lg:grid grid-cols-2 gap-3 h-[480px]">
             <div className="flex flex-col gap-3">
-              <div className="rounded-2xl overflow-hidden flex-1 shadow-brand">
-                <img src={heroImgs[0]} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <div className="rounded-2xl overflow-hidden flex-1 shadow-brand bg-brand-50">
+                <img src={heroImgs[0]} alt="" className="w-full h-full object-contain" />
               </div>
-              <div className="rounded-2xl overflow-hidden h-40 shadow-sm">
-                <img src={heroImgs[1]} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <div className="rounded-2xl overflow-hidden h-40 shadow-sm bg-brand-50">
+                <img src={heroImgs[1]} alt="" className="w-full h-full object-contain" />
               </div>
             </div>
             <div className="flex flex-col gap-3 mt-8">
-              <div className="rounded-2xl overflow-hidden h-40 shadow-sm">
-                <img src={heroImgs[2]} alt="" className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" />
+              <div className="rounded-2xl overflow-hidden h-40 shadow-sm bg-brand-50">
+                <img src={heroImgs[2]} alt="" className="w-full h-full object-contain" />
               </div>
-              <div className="rounded-2xl overflow-hidden flex-1 shadow-brand">
-                <img src={heroImgs[3]} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <div className="rounded-2xl overflow-hidden flex-1 shadow-brand bg-brand-50">
+                <img src={heroImgs[3]} alt="" className="w-full h-full object-contain" />
               </div>
             </div>
           </div>
