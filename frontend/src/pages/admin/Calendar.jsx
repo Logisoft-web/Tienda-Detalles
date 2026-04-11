@@ -202,9 +202,16 @@ export default function AdminCalendar() {
                 {modal.mode === 'view' && ev && (
                   <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: ev.color }} />
                 )}
-                <h3 className="font-script text-2xl text-brand-600">
-                  {modal.mode === 'add' ? 'Nuevo Evento' : ev?.title}
-                </h3>
+                <div>
+                  <h3 className="font-script text-2xl text-brand-600">
+                    {modal.mode === 'add' ? 'Nuevo Evento' : ev?.title}
+                  </h3>
+                  {modal.mode === 'add' && modal.date && (
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      📅 {format(modal.date, "EEEE dd 'de' MMMM 'de' yyyy", { locale: es })}
+                    </p>
+                  )}
+                </div>
               </div>
               <button onClick={() => setModal(null)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
