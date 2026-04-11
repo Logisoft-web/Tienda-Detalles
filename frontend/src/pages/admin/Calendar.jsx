@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
 import 'moment/locale/es'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import { Plus, X, Calendar as CalIcon } from 'lucide-react'
+import { Plus, X, Calendar as CalIcon, CheckCircle, DollarSign } from 'lucide-react'
 import { api } from '../../lib/api'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
@@ -24,6 +24,8 @@ export default function AdminCalendar() {
   const [form, setForm]     = useState({ title: '', client_name: '', color: COLORS[0], notes: '' })
   const [view, setView]     = useState(Views.MONTH)
   const [loading, setLoading] = useState(true)
+  const [payForm, setPayForm] = useState({ amount: '', category: 'Venta detalle', description: '' })
+  const [paying, setPaying] = useState(false)
 
   const load = () => api.getEvents()
     .then(data => setEvents(data.map(e => ({ ...e, start: new Date(e.event_date), end: new Date(e.event_date) }))))
@@ -56,6 +58,25 @@ export default function AdminCalendar() {
       setModal(null)
       toast.success('Evento eliminado')
     } catch (err) { toast.error(err.message) }
+  }
+
+  const handleRegisterPayment = async () => {
+    if (!payForm.amount || parseFloat(payForm.amount) <= 0) return toast.error('Ingresa un monto válido')
+    setPaying(true)
+    try {
+      const ev = modal.event
+      await api.createTransaction({
+        type: 'income',
+        category: payForm.category,
+        amount: parseFloat(payForm.amount),
+        description: payForm.description || `Pago: ${ev.title}${ev.client_name ? ` — ${ev.client_name}` : ''}`,
+        date: ev.event_date?.slice(0, 10) || new Date().toISOString().slice(0, 10),
+      })
+      toast.success('✅ Pago registrado en contabilidad')
+      setPayForm({ amount: '', category: 'Venta detalle', description: '' })
+      setModal(null)
+    } catch (err) { toast.error(err.message) }
+    finally { setPaying(false) }
   }
 
   const upcoming = [...events].sort((a, b) => a.start - b.start).filter(e => e.start >= new Date())
@@ -149,8 +170,44 @@ export default function AdminCalendar() {
                 <p className="text-sm text-gray-600"><span className="font-medium">Cliente:</span> {modal.event?.client_name || '—'}</p>
                 <p className="text-sm text-gray-600"><span className="font-medium">Fecha:</span> {format(new Date(modal.event?.event_date), 'dd MMMM yyyy', { locale: es })}</p>
                 {modal.event?.notes && <p className="text-sm text-gray-600"><span className="font-medium">Notas:</span> {modal.event.notes}</p>}
+
+                {/* Registrar pago */}
+                <div className="border-t border-brand-100 pt-4 mt-4">
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+                    <DollarSign size={12} className="text-brand-500" /> Registrar pago en contabilidad
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="number" min="0" placeholder="Monto del pago"
+                        value={payForm.amount}
+                        onChange={e => setPayForm(f => ({ ...f, amount: e.target.value }))}
+                        className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-brand-400"
+                      />
+                      <select value={payForm.category}
+                        onChange={e => setPayForm(f => ({ ...f, category: e.target.value }))}
+                        className="border border-gray-200 rounded-xl px-3 py-2.5 text-xs outline-none focus:border-brand-400 bg-white">
+                        <option value="Venta detalle">🎁 Venta detalle</option>
+                        <option value="Domicilio">🛵 Domicilio</option>
+                        <option value="Personalización">✨ Personalización</option>
+                        <option value="Otro ingreso">💰 Otro ingreso</option>
+                      </select>
+                    </div>
+                    <input placeholder="Descripción (opcional)"
+                      value={payForm.description}
+                      onChange={e => setPayForm(f => ({ ...f, description: e.target.value }))}
+                      className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-brand-400"
+                    />
+                    <button onClick={handleRegisterPayment} disabled={paying || !payForm.amount}
+                      className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl text-sm transition-colors">
+                      <CheckCircle size={16} />
+                      {paying ? 'Registrando...' : 'Registrar pago'}
+                    </button>
+                  </div>
+                </div>
+
                 <button onClick={() => handleDelete(modal.event.id)}
-                  className="w-full mt-2 border border-red-200 text-red-500 hover:bg-red-50 font-semibold py-3 rounded-xl transition-colors text-sm">
+                  className="w-full border border-red-200 text-red-500 hover:bg-red-50 font-semibold py-2.5 rounded-xl transition-colors text-sm">
                   Eliminar evento
                 </button>
               </div>
