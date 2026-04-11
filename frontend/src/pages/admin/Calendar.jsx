@@ -24,6 +24,7 @@ const MESSAGES = {
 }
 
 const FORMATS = {
+  // Estas funciones usan moment con locale 'es' ya activo
   weekdayFormat: (date, culture, loc) => loc.format(date, 'ddd', culture),
   dayFormat: (date, culture, loc) => loc.format(date, 'ddd DD', culture),
   dayHeaderFormat: (date, culture, loc) => loc.format(date, 'dddd DD [de] MMMM', culture),
@@ -32,14 +33,18 @@ const FORMATS = {
     `${loc.format(start, 'DD MMM', culture)} – ${loc.format(end, 'DD MMM', culture)}`,
 }
 
-// Header personalizado para columnas de días — garantiza español
-const WeekHeader = ({ date }) => (
-  <span style={{ textTransform: 'capitalize' }}>
-    {moment(date).format('ddd')}
-  </span>
+// El header de mes recibe { label } que ya viene formateado por weekdayFormat
+// Solo necesitamos capitalize porque moment en español devuelve minúsculas
+const MonthHeader = ({ label }) => (
+  <span style={{ textTransform: 'capitalize' }}>{label}</span>
 )
 
-const COMPONENTS = { week: { header: WeekHeader }, month: { header: WeekHeader } }
+const COMPONENTS = {
+  month: { header: MonthHeader },
+  week: { header: ({ date }) => (
+    <span style={{ textTransform: 'capitalize' }}>{moment(date).format('ddd DD')}</span>
+  )},
+}
 
 const fmt = n => `$${Number(n || 0).toLocaleString('es-CO')}`
 const EMPTY_FORM = { title: '', client_name: '', color: COLORS[0], notes: '', total_value: '', amount_paid: '' }
