@@ -29,6 +29,20 @@ function HeroCarousel({ images }) {
   const [active, setActive] = useState(0)
   const total = images.length
   const intervalRef = useRef(null)
+  const [dims, setDims] = useState({ w: 200, h: 280, rx: 130, rz: 45, height: 420 })
+
+  useEffect(() => {
+    function updateDims() {
+      const vw = window.innerWidth
+      if (vw >= 1440) setDims({ w: 300, h: 420, rx: 200, rz: 60, height: 580 })       // xl
+      else if (vw >= 1024) setDims({ w: 260, h: 360, rx: 160, rz: 50, height: 520 })  // lg
+      else if (vw >= 768) setDims({ w: 200, h: 280, rx: 130, rz: 40, height: 420 })   // md
+      else setDims({ w: 150, h: 210, rx: 100, rz: 30, height: 320 })                  // sm/mobile
+    }
+    updateDims()
+    window.addEventListener('resize', updateDims)
+    return () => window.removeEventListener('resize', updateDims)
+  }, [])
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -41,11 +55,8 @@ function HeroCarousel({ images }) {
     const offset = (i - active + total) % total
     const angle = (offset / total) * 360
     const rad = (angle * Math.PI) / 180
-    // Radio del carrusel
-    const rx = 160  // horizontal
-    const rz = 50   // profundidad
-    const x = Math.sin(rad) * rx
-    const z = Math.cos(rad) * rz - rz
+    const x = Math.sin(rad) * dims.rx
+    const z = Math.cos(rad) * dims.rz - dims.rz
     const scale = 0.55 + 0.45 * ((Math.cos(rad) + 1) / 2)
     const opacity = 0.4 + 0.6 * ((Math.cos(rad) + 1) / 2)
     const zIndex = Math.round(scale * 10)
@@ -59,7 +70,7 @@ function HeroCarousel({ images }) {
 
   return (
     <div className="relative w-full flex items-center justify-center"
-      style={{ height: '520px', perspective: '900px' }}>
+      style={{ height: `${dims.height}px`, perspective: '900px' }}>
       <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
         {images.map((src, i) => (
           <div key={i}
@@ -67,19 +78,14 @@ function HeroCarousel({ images }) {
             className="absolute left-1/2 top-1/2 cursor-pointer"
             style={{
               ...getStyle(i),
-              marginLeft: '-130px',
-              marginTop: '-180px',
-              width: '260px',
-              height: '360px',
+              marginLeft: `-${dims.w / 2}px`,
+              marginTop: `-${dims.h / 2}px`,
+              width: `${dims.w}px`,
+              height: `${dims.h}px`,
             }}>
             <div className="w-full h-full rounded-3xl overflow-hidden ring-4 ring-white shadow-2xl">
               <img src={src} alt="" className="w-full h-full object-cover" />
             </div>
-            {/* Reflejo sutil */}
-            {(i - active + total) % total === 0 && (
-              <div className="absolute -bottom-2 left-2 right-2 h-8 rounded-b-3xl"
-                style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.15), transparent)', filter: 'blur(4px)' }} />
-            )}
           </div>
         ))}
       </div>
