@@ -1,5 +1,5 @@
 const WA_NUMBER = '573212126285'
-const WA_MSG = encodeURIComponent('Hola! Me interesa conocer sus productos 🌸')
+const WA_MSG = encodeURIComponent('¡Hola! 👋 Vi su página web y me encantaron los detalles que tienen. Me gustaría recibir información sobre el catálogo actual y saber qué opciones tienen disponibles para entrega en San Gil. ¿Me podrían ayudar? ¡Muchas gracias! ✨')
 
 export default function WhatsAppBtn() {
   return (

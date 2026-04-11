@@ -156,7 +156,7 @@ export default function Home() {
                   className="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-body font-bold px-7 py-3.5 rounded-full transition-all shadow-brand hover:shadow-brand-lg text-sm tracking-wide">
                   Ver Productos
                 </a>
-                <a href="https://wa.me/573212126285" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/573212126285?text=%C2%A1Hola!%20%F0%9F%91%8B%20Vi%20su%20p%C3%A1gina%20web%20y%20me%20encantaron%20los%20detalles%20que%20tienen.%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20el%20cat%C3%A1logo%20actual%20y%20saber%20qu%C3%A9%20opciones%20tienen%20disponibles%20para%20entrega%20en%20San%20Gil.%20%C2%BFMe%20podr%C3%ADan%20ayudar%3F%20%C2%A1Muchas%20gracias!%20%E2%9C%A8" target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-white hover:bg-brand-50 text-brand-500 font-body font-bold px-7 py-3.5 rounded-full border border-brand-200 transition-all text-sm tracking-wide">
                   <Phone size={15} />
                   Contáctanos
@@ -313,13 +313,13 @@ export default function Home() {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <a href="https://wa.me/573212126285?text=Hola!%20Me%20interesa%20conocer%20sus%20productos%20%F0%9F%8C%B8"
+            <a href="https://wa.me/573212126285?text=%C2%A1Hola!%20%F0%9F%91%8B%20Vi%20su%20p%C3%A1gina%20web%20y%20me%20encantaron%20los%20detalles%20que%20tienen.%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20el%20cat%C3%A1logo%20actual%20y%20saber%20qu%C3%A9%20opciones%20tienen%20disponibles%20para%20entrega%20en%20San%20Gil.%20%C2%BFMe%20podr%C3%ADan%20ayudar%3F%20%C2%A1Muchas%20gracias!%20%E2%9C%A8"
               target="_blank" rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-body font-700 px-8 py-4 rounded-full transition-all text-sm tracking-wide shadow-lg">
               <Phone size={18} />
               WhatsApp: 321 212 6285
             </a>
-            <a href="https://wa.me/573169143500?text=Hola!%20Me%20interesa%20conocer%20sus%20productos%20%F0%9F%8C%B8"
+            <a href="https://wa.me/573169143500?text=%C2%A1Hola!%20%F0%9F%91%8B%20Vi%20su%20p%C3%A1gina%20web%20y%20me%20encantaron%20los%20detalles%20que%20tienen.%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20el%20cat%C3%A1logo%20actual%20y%20saber%20qu%C3%A9%20opciones%20tienen%20disponibles%20para%20entrega%20en%20San%20Gil.%20%C2%BFMe%20podr%C3%ADan%20ayudar%3F%20%C2%A1Muchas%20gracias!%20%E2%9C%A8"
               target="_blank" rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 text-white font-body font-700 px-8 py-4 rounded-full transition-all text-sm tracking-wide border border-white/20">
               <Phone size={18} />

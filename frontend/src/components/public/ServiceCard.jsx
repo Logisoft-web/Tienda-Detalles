@@ -10,10 +10,11 @@ const CAT_LABELS = {
 }
 
 const WA = '573212126285'
+const WA_MSG = encodeURIComponent('¡Hola! 👋 Vi su página web y me encantaron los detalles que tienen. Me gustaría recibir información sobre el catálogo actual y saber qué opciones tienen disponibles para entrega en San Gil. ¿Me podrían ayudar? ¡Muchas gracias! ✨')
 
 export default function ServiceCard({ service }) {
   const { name, category, price, description, image_url } = service
-  const waMsg = encodeURIComponent(`Hola! Me interesa: ${name} 🌸`)
+  const waMsg = encodeURIComponent(`¡Hola! 👋 Vi su página web y me interesa: ${name} 🌸 ¿Me pueden dar más información y el precio actual? ¡Muchas gracias! ✨`)
 
   return (
     <article className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-brand transition-all duration-300 hover:-translate-y-1 border border-brand-100">
