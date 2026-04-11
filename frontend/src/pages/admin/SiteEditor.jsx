@@ -120,11 +120,10 @@ export default function SiteEditor() {
           <div className="grid grid-cols-2 gap-3">
             {[0,1,2,3].map(i => (
               <div key={i} onClick={() => setPicker({ key: 'hero', index: i })}
-                className="group relative rounded-2xl overflow-hidden border-2 border-dashed border-brand-200 bg-brand-50/30 cursor-pointer hover:border-brand-400 hover:bg-brand-50 transition-all"
-                style={{ aspectRatio: i === 0 || i === 3 ? '1/1.2' : '1/0.7' }}>
+                className="group relative rounded-2xl overflow-hidden border-2 border-dashed border-brand-200 bg-brand-50/30 cursor-pointer hover:border-brand-400 hover:bg-brand-50 transition-all h-36">
                 {config.hero_images[i] ? (
                   <>
-                    <img src={config.hero_images[i]} alt="" className="w-full h-full object-contain p-1" />
+                    <img src={config.hero_images[i]} alt="" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
                       <span className="text-white text-xs font-bold bg-black/50 px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                         Cambiar foto
