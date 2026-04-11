@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Heart, Phone, MapPin, ChevronDown, Star } from 'lucide-react'
 import ServiceCard from '../components/public/ServiceCard'
 import { api } from '../lib/api'
@@ -22,6 +22,77 @@ const DEFAULT_CONFIG = {
     { name: 'Carlos R.',    text: 'Compré un peluche para el cumpleaños de mi novia y quedó encantada. Muy buena calidad.', stars: 5 },
     { name: 'Valentina P.', text: 'Los accesorios son únicos, no los encuentras en otro lado. Siempre vuelvo a comprar.', stars: 5 },
   ],
+}
+
+// ── Carrusel 3D ──────────────────────────────────────────────
+function HeroCarousel({ images }) {
+  const [active, setActive] = useState(0)
+  const total = images.length
+  const intervalRef = useRef(null)
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setActive(a => (a + 1) % total)
+    }, 3000)
+    return () => clearInterval(intervalRef.current)
+  }, [total])
+
+  const getStyle = (i) => {
+    const offset = (i - active + total) % total
+    const angle = (offset / total) * 360
+    const rad = (angle * Math.PI) / 180
+    // Radio del carrusel
+    const rx = 120  // horizontal
+    const rz = 40   // profundidad
+    const x = Math.sin(rad) * rx
+    const z = Math.cos(rad) * rz - rz
+    const scale = 0.55 + 0.45 * ((Math.cos(rad) + 1) / 2)
+    const opacity = 0.4 + 0.6 * ((Math.cos(rad) + 1) / 2)
+    const zIndex = Math.round(scale * 10)
+    return {
+      transform: `translateX(${x}px) translateZ(${z}px) scale(${scale})`,
+      opacity,
+      zIndex,
+      transition: 'all 0.6s cubic-bezier(0.4,0,0.2,1)',
+    }
+  }
+
+  return (
+    <div className="relative w-full flex items-center justify-center"
+      style={{ height: '420px', perspective: '800px' }}>
+      <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+        {images.map((src, i) => (
+          <div key={i}
+            onClick={() => { setActive(i); clearInterval(intervalRef.current) }}
+            className="absolute left-1/2 top-1/2 cursor-pointer"
+            style={{
+              ...getStyle(i),
+              marginLeft: '-100px',
+              marginTop: '-140px',
+              width: '200px',
+              height: '280px',
+            }}>
+            <div className="w-full h-full rounded-3xl overflow-hidden ring-4 ring-white shadow-2xl">
+              <img src={src} alt="" className="w-full h-full object-cover" />
+            </div>
+            {/* Reflejo sutil */}
+            {(i - active + total) % total === 0 && (
+              <div className="absolute -bottom-2 left-2 right-2 h-8 rounded-b-3xl"
+                style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.15), transparent)', filter: 'blur(4px)' }} />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Dots */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        {images.map((_, i) => (
+          <button key={i} onClick={() => setActive(i)}
+            className={`rounded-full transition-all ${i === active ? 'w-6 h-2 bg-brand-500' : 'w-2 h-2 bg-brand-200'}`} />
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default function Home() {
@@ -98,41 +169,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ── Mosaico fotos ── */}
-            <div className="lg:col-span-7 order-1 lg:order-2">
-              {/* Mobile: grid 2x2 */}
-              <div className="grid grid-cols-2 gap-2 lg:hidden">
-                {heroImgs.map((src, i) => (
-                  <div key={i} className="rounded-2xl overflow-hidden shadow-sm" style={{ aspectRatio: '3/4' }}>
-                    <img src={src} alt="" className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
-
-              {/* Desktop: mosaico asimétrico */}
-              <div className="hidden lg:block relative h-[500px]">
-                {/* Foto 1 — grande izquierda arriba */}
-                <div className="absolute left-0 top-0 w-[47%] h-[60%] rounded-3xl overflow-hidden shadow-brand ring-4 ring-white/80">
-                  <img src={heroImgs[0]} alt="" className="w-full h-full object-cover" />
-                </div>
-                {/* Foto 2 — pequeña derecha arriba */}
-                <div className="absolute right-0 top-0 w-[50%] h-[37%] rounded-3xl overflow-hidden shadow-sm ring-4 ring-white/80">
-                  <img src={heroImgs[1]} alt="" className="w-full h-full object-cover" />
-                </div>
-                {/* Foto 3 — pequeña izquierda abajo */}
-                <div className="absolute left-0 bottom-0 w-[50%] h-[37%] rounded-3xl overflow-hidden shadow-sm ring-4 ring-white/80">
-                  <img src={heroImgs[2]} alt="" className="w-full h-full object-cover" />
-                </div>
-                {/* Foto 4 — grande derecha abajo */}
-                <div className="absolute right-0 bottom-0 w-[47%] h-[60%] rounded-3xl overflow-hidden shadow-brand ring-4 ring-white/80">
-                  <img src={heroImgs[3]} alt="" className="w-full h-full object-cover" />
-                </div>
-                {/* Badge central flotante */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-white rounded-2xl shadow-brand px-4 py-3 text-center border border-brand-100 backdrop-blur-sm">
-                  <p className="text-2xl leading-none">🌸</p>
-                  <p className="text-[10px] font-bold text-brand-500 mt-1 whitespace-nowrap leading-tight">Hecho con<br/>Amor</p>
-                </div>
-              </div>
+            {/* ── Carrusel 3D ── */}
+            <div className="lg:col-span-7 order-1 lg:order-2 flex items-center justify-center">
+              <HeroCarousel images={heroImgs} />
             </div>
           </div>
         </div>
