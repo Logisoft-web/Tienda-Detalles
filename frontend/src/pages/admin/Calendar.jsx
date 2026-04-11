@@ -15,7 +15,10 @@ const COLORS = ['#e91e8c', '#e8b923', '#ff80aa', '#c4006e', '#9a0055', '#ff4d88'
 const MESSAGES = {
   today: 'Hoy', previous: '‹', next: '›',
   month: 'Mes', week: 'Semana', day: 'Día', agenda: 'Agenda',
-  noEventsInRange: 'Sin eventos', showMore: n => `+${n} más`,
+  date: 'Fecha', time: 'Hora', event: 'Evento',
+  noEventsInRange: 'Sin eventos en este rango',
+  showMore: n => `+${n} más`,
+  allDay: 'Todo el día',
 }
 
 export default function AdminCalendar() {
@@ -100,7 +103,7 @@ export default function AdminCalendar() {
       <div className="hidden md:block bg-white rounded-2xl p-4 shadow-sm" style={{ height: 560 }}>
         <Calendar localizer={localizer} events={events} startAccessor="start" endAccessor="end"
           view={view} onView={setView} onSelectSlot={handleSelectSlot} onSelectEvent={handleSelectEvent}
-          selectable messages={MESSAGES}
+          selectable messages={MESSAGES} culture="es"
           eventPropGetter={e => ({ style: { backgroundColor: e.color, border: 'none', borderRadius: 6 } })}
           style={{ height: '100%' }} />
       </div>
