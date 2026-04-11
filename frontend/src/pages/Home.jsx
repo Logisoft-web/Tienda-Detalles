@@ -57,7 +57,7 @@ export default function Home() {
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
 
             {/* ── Texto ── */}
-            <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1">
+            <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left items-center lg:items-start">
               <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-1.5 rounded-full text-brand-500 text-xs font-body tracking-widest uppercase mb-6 shadow-sm w-fit">
                 <Heart size={10} className="fill-brand-400" />
                 San Gil, Santander
@@ -88,7 +88,7 @@ export default function Home() {
                 </a>
               </div>
 
-              <div className="flex gap-8 mt-10 pt-8 border-t border-brand-100">
+              <div className="flex gap-8 mt-10 pt-8 border-t border-brand-100 justify-center lg:justify-start">
                 {[['💐','Flores'],['🧸','Peluches'],['✨','Accesorios']].map(([icon, label]) => (
                   <div key={label} className="text-center">
                     <p className="text-xl mb-0.5">{icon}</p>
@@ -248,21 +248,21 @@ export default function Home() {
       {/* ── CONTACTO ── */}
       <section id="contacto" className="py-20 px-4 bg-dark text-white">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
+          <div className="text-center md:text-left">
             <p className="text-brand-300 font-body text-xs tracking-widest uppercase mb-3">Visítanos</p>
             <h2 className="font-display text-4xl md:text-5xl mb-6">¿Lista para<br /><em className="text-brand-400 not-italic">sorprender?</em></h2>
-            <div className="flex items-start gap-3 mb-4">
+            <div className="flex items-start gap-3 mb-4 justify-center md:justify-start">
               <MapPin size={18} className="text-brand-400 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-body text-white text-sm">Calle 5 # 8-25</p>
                 <p className="font-body text-gray-400 text-sm">San Gil, Santander</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-2 justify-center md:justify-start">
               <Phone size={18} className="text-brand-400 flex-shrink-0" />
               <p className="font-body text-white text-sm">321 212 6285</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-center md:justify-start">
               <Phone size={18} className="text-brand-400 flex-shrink-0" />
               <p className="font-body text-white text-sm">316 914 3500</p>
             </div>
