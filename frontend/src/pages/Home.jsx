@@ -188,7 +188,7 @@ export default function Home() {
           <div className="w-16 h-0.5 bg-brand-400 mx-auto mt-4" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map(({ name, text, stars }, idx) => (
+          {testimonials.map(({ name, text, stars, image }, idx) => (
             <div key={idx} className="bg-white rounded-2xl p-6 shadow-sm border border-brand-100">
               <div className="flex gap-0.5 mb-4">
                 {Array.from({ length: stars }).map((_, i) => (
@@ -196,7 +196,10 @@ export default function Home() {
                 ))}
               </div>
               <p className="text-gray-600 text-sm mb-4 leading-relaxed font-body italic">"{text}"</p>
-              <p className="text-brand-500 font-display font-600 text-sm">{name}</p>
+              <div className="flex items-center gap-3">
+                {image && <img src={image} alt={name} className="w-9 h-9 rounded-full object-cover border border-brand-100" />}
+                <p className="text-brand-500 font-display font-600 text-sm">{name}</p>
+              </div>
             </div>
           ))}
         </div>

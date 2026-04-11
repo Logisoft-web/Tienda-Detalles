@@ -11,7 +11,29 @@ export default function ImagePicker({ value, onChange, onClose }) {
   useEffect(() => { loadMedia() }, [])
 
   async function loadMedia() {
-    try { setMedia(await api.getMedia()) } catch (e) { toast.error(e.message) }
+    try {
+      const items = await api.getMedia()
+      // Si no hay imágenes en DB, mostrar las de /galeria/ como fallback
+      if (items.length === 0) {
+        const galeria = [
+          '/galeria/flores-eternas-01.jpg','/galeria/flores-eternas-02.jpg','/galeria/flores-eternas-03.jpg',
+          '/galeria/flores-eternas-04.jpg','/galeria/flores-eternas-05.jpg',
+          '/galeria/peluche-01.jpg','/galeria/peluche-02.jpg','/galeria/peluche-03.jpg','/galeria/peluche-04.jpg',
+          '/galeria/regalo-01.jpg','/galeria/regalo-02.jpg','/galeria/regalo-03.jpg',
+          '/galeria/regalo-04.jpg','/galeria/regalo-05.jpg','/galeria/regalo-06.jpg',
+          '/galeria/accesorio-01.jpg','/galeria/accesorio-02.jpg','/galeria/accesorio-03.jpg',
+          '/galeria/accesorio-04.jpg','/galeria/accesorio-05.jpg',
+          '/galeria/detalle-01.jpg','/galeria/detalle-02.jpg','/galeria/detalle-03.jpg',
+          '/galeria/detalle-04.jpg','/galeria/detalle-05.jpg','/galeria/detalle-06.jpg',
+          '/galeria/arreglo-floral-01.jpg','/galeria/arreglo-floral-02.jpg',
+          '/galeria/arreglo-floral-03.jpg','/galeria/arreglo-floral-04.jpg',
+          '/galeria/Logo.png',
+        ]
+        setMedia(galeria.map((url, i) => ({ id: `g-${i}`, url, filename: url.split('/').pop() })))
+      } else {
+        setMedia(items)
+      }
+    } catch (e) { toast.error(e.message) }
   }
 
   async function handleUpload(e) {

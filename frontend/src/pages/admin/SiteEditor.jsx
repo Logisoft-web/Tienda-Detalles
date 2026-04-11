@@ -90,44 +90,29 @@ export default function SiteEditor() {
       {/* ── HERO ── */}
       {tab === 'hero' && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-brand-100 space-y-5">
-          <h3 className="font-bold text-dark">Sección principal</h3>
+          <h3 className="font-bold text-dark">Imágenes del collage</h3>
 
-          <div>
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Título</label>
-            <input value={config.hero_title}
-              onChange={e => setConfig(c => ({ ...c, hero_title: e.target.value }))}
-              className="w-full mt-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:border-brand-400" />
-          </div>
-
-          <div>
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Descripción</label>
-            <textarea value={config.hero_subtitle} rows={3}
-              onChange={e => setConfig(c => ({ ...c, hero_subtitle: e.target.value }))}
-              className="w-full mt-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:border-brand-400 resize-none" />
-          </div>
-
-          <div>
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Imágenes del collage (4)</label>
-            <div className="grid grid-cols-2 gap-3">
-              {[0,1,2,3].map(i => (
-                <div key={i} className="relative rounded-xl overflow-hidden border border-brand-100 h-32 bg-gray-50 cursor-pointer hover:border-brand-400 transition-colors"
+          <div className="grid grid-cols-2 gap-3">
+            {[0,1,2,3].map(i => (
+              <div key={i} className="space-y-2">
+                <div className="relative rounded-xl overflow-hidden border border-brand-100 h-40 bg-gray-50 cursor-pointer hover:border-brand-400 transition-colors"
                   onClick={() => setPicker({ key: 'hero', index: i })}>
                   {config.hero_images[i]
                     ? <img src={config.hero_images[i]} alt="" className="w-full h-full object-cover" />
                     : <div className="flex items-center justify-center h-full text-gray-300 text-xs">Clic para elegir</div>
                   }
                   <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center">
-                    <span className="text-white text-xs opacity-0 hover:opacity-100">Cambiar</span>
+                    <span className="text-white text-xs font-bold opacity-0 hover:opacity-100 bg-black/40 px-2 py-1 rounded">Cambiar</span>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
 
-          <button onClick={() => { save('hero_title', config.hero_title); save('hero_subtitle', config.hero_subtitle); save('hero_images', config.hero_images) }}
+          <button onClick={() => save('hero_images', config.hero_images)}
             disabled={saving}
             className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-bold py-2.5 px-6 rounded-xl text-sm transition-colors disabled:opacity-60">
-            <Save className="w-4 h-4" /> Guardar Hero
+            <Save className="w-4 h-4" /> Guardar imágenes
           </button>
         </div>
       )}
@@ -196,6 +181,16 @@ export default function SiteEditor() {
                 <textarea placeholder="Opinión" value={t.text} rows={2}
                   onChange={e => updateTestimonial(i, 'text', e.target.value)}
                   className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-brand-400 resize-none" />
+                <div className="flex items-center gap-3">
+                  <div className="w-14 h-14 rounded-full overflow-hidden border border-brand-100 bg-gray-50 flex-shrink-0 cursor-pointer hover:border-brand-400 transition-colors"
+                    onClick={() => setPicker({ key: 'testimonial', index: i })}>
+                    {t.image
+                      ? <img src={t.image} alt="" className="w-full h-full object-cover" />
+                      : <div className="flex items-center justify-center h-full text-gray-300 text-xs text-center leading-tight p-1">foto</div>
+                    }
+                  </div>
+                  <span className="text-xs text-gray-400">Foto opcional del cliente</span>
+                </div>
               </div>
             ))}
           </div>
@@ -218,6 +213,7 @@ export default function SiteEditor() {
             if (picker.key === 'hero') updateHeroImage(picker.index, url)
             else if (picker.key === 'gallery') updateGalleryImage(picker.index, url)
             else if (picker.key === 'gallery_add') addGalleryImage(url)
+            else if (picker.key === 'testimonial') updateTestimonial(picker.index, 'image', url)
           }}
           onClose={() => setPicker(null)}
         />
