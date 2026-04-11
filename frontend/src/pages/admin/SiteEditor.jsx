@@ -120,7 +120,9 @@ export default function SiteEditor() {
           <div className="grid grid-cols-2 gap-3">
             {[0,1,2,3].map(i => (
               <div key={i} onClick={() => setPicker({ key: 'hero', index: i })}
-                className="group relative rounded-2xl overflow-hidden border-2 border-dashed border-brand-200 bg-brand-50/30 cursor-pointer hover:border-brand-400 hover:bg-brand-50 transition-all aspect-square">
+                className="group relative rounded-2xl overflow-hidden border-2 border-dashed border-brand-200 bg-brand-50/30 cursor-pointer hover:border-brand-400 hover:bg-brand-50 transition-all"
+                style={{ paddingBottom: '100%', height: 0 }}>
+                <div className="absolute inset-0">
                 {config.hero_images[i] ? (
                   <>
                     <img src={config.hero_images[i]} alt="" className="w-full h-full object-cover" />
@@ -138,6 +140,7 @@ export default function SiteEditor() {
                 )}
                 <div className="absolute top-2 left-2 bg-white/90 text-brand-500 text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-sm">
                   {i + 1}
+                </div>
                 </div>
               </div>
             ))}
