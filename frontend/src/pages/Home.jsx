@@ -76,21 +76,22 @@ export default function Home() {
           </div>
 
           {/* Collage de fotos */}
-          <div className="hidden lg:grid grid-cols-2 gap-3 h-[480px]">
-            <div className="flex flex-col gap-3">
-              <div className="rounded-2xl overflow-hidden flex-1 shadow-brand">
-                <img src={heroImgs[0]} alt="" className="w-full h-full object-contain" />
+          {/* Collage de fotos — optimizado para fotos verticales */}
+          <div className="hidden lg:grid grid-cols-2 gap-3 h-[520px]">
+            <div className="grid grid-rows-2 gap-3">
+              <div className="rounded-2xl overflow-hidden shadow-brand">
+                <img src={heroImgs[0]} alt="" className="w-full h-full object-cover object-center" />
               </div>
-              <div className="rounded-2xl overflow-hidden h-40 shadow-sm">
-                <img src={heroImgs[1]} alt="" className="w-full h-full object-contain" />
+              <div className="rounded-2xl overflow-hidden shadow-sm">
+                <img src={heroImgs[1]} alt="" className="w-full h-full object-cover object-center" />
               </div>
             </div>
-            <div className="flex flex-col gap-3 mt-8">
-              <div className="rounded-2xl overflow-hidden h-40 shadow-sm">
-                <img src={heroImgs[2]} alt="" className="w-full h-full object-contain" />
+            <div className="grid grid-rows-2 gap-3 mt-10">
+              <div className="rounded-2xl overflow-hidden shadow-sm">
+                <img src={heroImgs[2]} alt="" className="w-full h-full object-cover object-center" />
               </div>
-              <div className="rounded-2xl overflow-hidden flex-1 shadow-brand">
-                <img src={heroImgs[3]} alt="" className="w-full h-full object-contain" />
+              <div className="rounded-2xl overflow-hidden shadow-brand">
+                <img src={heroImgs[3]} alt="" className="w-full h-full object-cover object-center" />
               </div>
             </div>
           </div>
