@@ -23,15 +23,23 @@ const MESSAGES = {
   showMore: n => `+${n} más`, allDay: 'Todo el día',
 }
 
-// Usar strings de formato moment — moment ya tiene locale 'es' activo
 const FORMATS = {
-  weekdayFormat: 'ddd',          // Dom, Lun, Mar...
-  dayFormat: 'ddd DD',           // lun 11
-  dayHeaderFormat: 'dddd DD [de] MMMM',
-  monthHeaderFormat: 'MMMM YYYY',
-  dayRangeHeaderFormat: ({ start, end }) =>
-    `${moment(start).format('DD MMM')} – ${moment(end).format('DD MMM')}`,
+  weekdayFormat: (date, culture, loc) => loc.format(date, 'ddd', culture),
+  dayFormat: (date, culture, loc) => loc.format(date, 'ddd DD', culture),
+  dayHeaderFormat: (date, culture, loc) => loc.format(date, 'dddd DD [de] MMMM', culture),
+  monthHeaderFormat: (date, culture, loc) => loc.format(date, 'MMMM YYYY', culture),
+  dayRangeHeaderFormat: ({ start, end }, culture, loc) =>
+    `${loc.format(start, 'DD MMM', culture)} – ${loc.format(end, 'DD MMM', culture)}`,
 }
+
+// Header personalizado para columnas de días — garantiza español
+const WeekHeader = ({ date }) => (
+  <span style={{ textTransform: 'capitalize' }}>
+    {moment(date).format('ddd')}
+  </span>
+)
+
+const COMPONENTS = { week: { header: WeekHeader }, month: { header: WeekHeader } }
 
 const fmt = n => `$${Number(n || 0).toLocaleString('es-CO')}`
 const EMPTY_FORM = { title: '', client_name: '', color: COLORS[0], notes: '', total_value: '', amount_paid: '' }
@@ -153,6 +161,7 @@ export default function AdminCalendar() {
           selectable
           messages={MESSAGES}
           formats={FORMATS}
+          components={COMPONENTS}
           eventPropGetter={e => {
             const saldo = Number(e.total_value || 0) - Number(e.amount_paid || 0)
             const hasSaldo = e.total_value && saldo > 0
