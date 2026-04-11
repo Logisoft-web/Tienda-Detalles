@@ -10,11 +10,11 @@ const NAV = [
   { to: '/admin/calendar',   label: 'Calendario',   icon: CalendarDays },
   { to: '/admin/quoter',     label: 'Cotizador',    icon: FileText },
   { to: '/admin/accounting', label: 'Contabilidad', icon: DollarSign },
+  { to: '/admin/site',       label: 'Editor Web',   icon: Settings },
 ]
 
 const NAV_SUPER = [
-  { to: '/admin/site',  label: 'Editor Web', icon: Settings },
-  { to: '/admin/users', label: 'Usuarios',   icon: Users },
+  { to: '/admin/users', label: 'Usuarios', icon: Users },
 ]
 
 export default function AdminLayout() {
