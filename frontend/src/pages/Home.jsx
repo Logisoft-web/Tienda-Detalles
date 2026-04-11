@@ -42,8 +42,8 @@ function HeroCarousel({ images }) {
     const angle = (offset / total) * 360
     const rad = (angle * Math.PI) / 180
     // Radio del carrusel
-    const rx = 120  // horizontal
-    const rz = 40   // profundidad
+    const rx = 160  // horizontal
+    const rz = 50   // profundidad
     const x = Math.sin(rad) * rx
     const z = Math.cos(rad) * rz - rz
     const scale = 0.55 + 0.45 * ((Math.cos(rad) + 1) / 2)
@@ -59,7 +59,7 @@ function HeroCarousel({ images }) {
 
   return (
     <div className="relative w-full flex items-center justify-center"
-      style={{ height: '420px', perspective: '800px' }}>
+      style={{ height: '520px', perspective: '900px' }}>
       <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
         {images.map((src, i) => (
           <div key={i}
@@ -67,10 +67,10 @@ function HeroCarousel({ images }) {
             className="absolute left-1/2 top-1/2 cursor-pointer"
             style={{
               ...getStyle(i),
-              marginLeft: '-100px',
-              marginTop: '-140px',
-              width: '200px',
-              height: '280px',
+              marginLeft: '-130px',
+              marginTop: '-180px',
+              width: '260px',
+              height: '360px',
             }}>
             <div className="w-full h-full rounded-3xl overflow-hidden ring-4 ring-white shadow-2xl">
               <img src={src} alt="" className="w-full h-full object-cover" />
@@ -125,9 +125,7 @@ export default function Home() {
         </div>
 
         <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-0 min-h-[90vh] flex items-center">
-          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-
-            {/* ── Texto ── */}
+          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">            {/* ── Texto ── */}
             <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left items-center lg:items-start">
               <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-1.5 rounded-full text-brand-500 text-xs font-body tracking-widest uppercase mb-6 shadow-sm w-fit">
                 <Heart size={10} className="fill-brand-400" />
