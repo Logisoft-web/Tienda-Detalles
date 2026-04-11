@@ -19,6 +19,13 @@ const MESSAGES = {
   noEventsInRange: 'Sin eventos en este rango',
   showMore: n => `+${n} más`, allDay: 'Todo el día',
 }
+const FORMATS = {
+  dayFormat: 'DD ddd',
+  weekdayFormat: (date, culture, loc) => loc.format(date, 'dddd', culture),
+  dayHeaderFormat: (date, culture, loc) => loc.format(date, 'dddd DD [de] MMMM', culture),
+  dayRangeHeaderFormat: ({ start, end }, culture, loc) =>
+    `${loc.format(start, 'DD MMM', culture)} – ${loc.format(end, 'DD MMM', culture)}`,
+}
 
 const fmt = n => `$${Number(n || 0).toLocaleString('es-CO')}`
 
@@ -145,7 +152,7 @@ export default function AdminCalendar() {
       <div className="hidden md:block bg-white rounded-2xl p-4 shadow-sm" style={{ height: 560 }}>
         <Calendar localizer={localizer} events={events} startAccessor="start" endAccessor="end"
           view={view} onView={setView} onSelectSlot={handleSelectSlot} onSelectEvent={handleSelectEvent}
-          selectable messages={MESSAGES} culture="es"
+          selectable messages={MESSAGES} culture="es" formats={FORMATS}
           eventPropGetter={e => {
             const saldo = Number(e.total_value || 0) - Number(e.amount_paid || 0)
             const hasSaldo = e.total_value && saldo > 0
