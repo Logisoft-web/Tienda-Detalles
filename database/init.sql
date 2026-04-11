@@ -50,6 +50,10 @@ CREATE TABLE IF NOT EXISTS transactions (
 -- Migración: agregar event_id si no existe (para bases de datos ya creadas)
 ALTER TABLE transactions ADD COLUMN IF NOT EXISTS event_id INTEGER;
 
+-- Migración: agregar total_value y amount_paid a events si no existen
+ALTER TABLE events ADD COLUMN IF NOT EXISTS total_value  NUMERIC(12,2);
+ALTER TABLE events ADD COLUMN IF NOT EXISTS amount_paid  NUMERIC(12,2) DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS users (
   id           SERIAL PRIMARY KEY,
   name         VARCHAR(120) NOT NULL,
