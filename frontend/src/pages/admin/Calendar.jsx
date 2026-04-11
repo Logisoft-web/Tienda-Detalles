@@ -1,15 +1,16 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
-import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'moment/locale/es'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { Plus, X, Calendar as CalIcon, CheckCircle, AlertCircle, DollarSign } from 'lucide-react'
 import { api } from '../../lib/api'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
-// moment.locale('es') ya se ejecuta en main.jsx globalmente
+// Locale español activo antes de crear el localizer
+moment.locale('es')
 const localizer = momentLocalizer(moment)
 
 const COLORS = ['#e91e8c', '#e8b923', '#ff80aa', '#c4006e', '#9a0055', '#ff4d88']
