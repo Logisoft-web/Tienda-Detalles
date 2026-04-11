@@ -100,10 +100,10 @@ export default function Home() {
 
             {/* ── Mosaico fotos ── */}
             <div className="lg:col-span-7 order-1 lg:order-2">
-              {/* Mobile: scroll horizontal */}
-              <div className="flex gap-3 overflow-x-auto pb-2 lg:hidden scrollbar-hide snap-x snap-mandatory">
+              {/* Mobile: grid 2x2 */}
+              <div className="grid grid-cols-2 gap-2 lg:hidden">
                 {heroImgs.map((src, i) => (
-                  <div key={i} className="flex-shrink-0 w-48 snap-start rounded-2xl overflow-hidden shadow-brand" style={{ aspectRatio: '3/4' }}>
+                  <div key={i} className="rounded-2xl overflow-hidden shadow-sm" style={{ aspectRatio: '3/4' }}>
                     <img src={src} alt="" className="w-full h-full object-cover" />
                   </div>
                 ))}
