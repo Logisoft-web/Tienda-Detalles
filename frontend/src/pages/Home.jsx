@@ -43,62 +43,101 @@ export default function Home() {
   return (
     <>
       {/* ── HERO ── */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-hero-gradient">
-        {/* Decorative blobs */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-200/30 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-petal/60 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none" />
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-hero-gradient">
+        {/* Fondo decorativo */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-brand-300/20 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-petal/50 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4" />
+          <div className="absolute top-20 left-10 w-2 h-2 bg-brand-300 rounded-full opacity-60" />
+          <div className="absolute top-40 left-24 w-1 h-1 bg-brand-400 rounded-full opacity-40" />
+          <div className="absolute bottom-32 right-20 w-3 h-3 bg-brand-200 rounded-full opacity-50" />
+        </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Texto */}
-          <div>
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur px-4 py-1.5 rounded-full text-brand-500 text-xs font-body tracking-widest uppercase mb-6 shadow-sm">
-              <Heart size={12} className="fill-brand-400" />
-              San Gil, Santander
-            </div>
-            <h1 className="font-display text-5xl md:text-7xl text-dark leading-tight mb-4">
-              {cfg.hero_title.split(' que ')[0]} que<br />
-              <em className="text-brand-500 not-italic">{cfg.hero_title.split(' que ')[1] || 'enamoran'}</em>
-            </h1>
-            <p className="font-body text-gray-500 text-lg mb-8 leading-relaxed max-w-md">
-              {cfg.hero_subtitle}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a href="#servicios"
-                className="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-body font-700 px-8 py-4 rounded-full transition-all shadow-brand hover:shadow-brand-lg text-sm tracking-wide">
-                Ver Productos
-              </a>
-              <a href="https://wa.me/573212126285" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-brand-50 text-brand-500 font-body font-700 px-8 py-4 rounded-full border border-brand-200 transition-all text-sm tracking-wide">
-                <Phone size={16} />
-                Contáctanos
-              </a>
-            </div>
-          </div>
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-0 min-h-screen flex items-center">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
 
-          {/* Collage de fotos */}
-          {/* Collage de fotos — optimizado para fotos verticales */}
-          <div className="hidden lg:grid grid-cols-2 gap-3 h-[520px]">
-            <div className="grid grid-rows-2 gap-3">
-              <div className="rounded-2xl overflow-hidden shadow-brand">
-                <img src={heroImgs[0]} alt="" className="w-full h-full object-cover object-center" />
+            {/* ── Texto ── */}
+            <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1">
+              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-1.5 rounded-full text-brand-500 text-xs font-body tracking-widest uppercase mb-6 shadow-sm w-fit">
+                <Heart size={10} className="fill-brand-400" />
+                San Gil, Santander
               </div>
-              <div className="rounded-2xl overflow-hidden shadow-sm">
-                <img src={heroImgs[1]} alt="" className="w-full h-full object-cover object-center" />
+
+              <h1 className="font-display leading-[1.05] mb-5">
+                <span className="block text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-dark">
+                  {cfg.hero_title.split(' que ')[0]}
+                </span>
+                <span className="block text-4xl sm:text-5xl lg:text-6xl xl:text-7xl">
+                  que <em className="text-brand-500 not-italic">{cfg.hero_title.split(' que ')[1] || 'enamoran'}</em>
+                </span>
+              </h1>
+
+              <p className="font-body text-gray-500 text-base lg:text-lg mb-8 leading-relaxed max-w-sm">
+                {cfg.hero_subtitle}
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a href="#servicios"
+                  className="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-body font-bold px-7 py-3.5 rounded-full transition-all shadow-brand hover:shadow-brand-lg text-sm tracking-wide">
+                  Ver Productos
+                </a>
+                <a href="https://wa.me/573212126285" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-brand-50 text-brand-500 font-body font-bold px-7 py-3.5 rounded-full border border-brand-200 transition-all text-sm tracking-wide">
+                  <Phone size={15} />
+                  Contáctanos
+                </a>
+              </div>
+
+              <div className="flex gap-8 mt-10 pt-8 border-t border-brand-100">
+                {[['💐','Flores'],['🧸','Peluches'],['✨','Accesorios']].map(([icon, label]) => (
+                  <div key={label} className="text-center">
+                    <p className="text-xl mb-0.5">{icon}</p>
+                    <p className="text-xs text-gray-400 font-body">{label}</p>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="grid grid-rows-2 gap-3 mt-10">
-              <div className="rounded-2xl overflow-hidden shadow-sm">
-                <img src={heroImgs[2]} alt="" className="w-full h-full object-cover object-center" />
+
+            {/* ── Mosaico fotos ── */}
+            <div className="lg:col-span-7 order-1 lg:order-2">
+              {/* Mobile: scroll horizontal */}
+              <div className="flex gap-3 overflow-x-auto pb-2 lg:hidden scrollbar-hide snap-x snap-mandatory">
+                {heroImgs.map((src, i) => (
+                  <div key={i} className="flex-shrink-0 w-48 snap-start rounded-2xl overflow-hidden shadow-brand" style={{ aspectRatio: '3/4' }}>
+                    <img src={src} alt="" className="w-full h-full object-cover" />
+                  </div>
+                ))}
               </div>
-              <div className="rounded-2xl overflow-hidden shadow-brand">
-                <img src={heroImgs[3]} alt="" className="w-full h-full object-cover object-center" />
+
+              {/* Desktop: mosaico asimétrico */}
+              <div className="hidden lg:block relative h-[580px]">
+                {/* Foto 1 — grande izquierda arriba */}
+                <div className="absolute left-0 top-0 w-[47%] h-[60%] rounded-3xl overflow-hidden shadow-brand ring-4 ring-white/80">
+                  <img src={heroImgs[0]} alt="" className="w-full h-full object-cover" />
+                </div>
+                {/* Foto 2 — pequeña derecha arriba */}
+                <div className="absolute right-0 top-0 w-[50%] h-[37%] rounded-3xl overflow-hidden shadow-sm ring-4 ring-white/80">
+                  <img src={heroImgs[1]} alt="" className="w-full h-full object-cover" />
+                </div>
+                {/* Foto 3 — pequeña izquierda abajo */}
+                <div className="absolute left-0 bottom-0 w-[50%] h-[37%] rounded-3xl overflow-hidden shadow-sm ring-4 ring-white/80">
+                  <img src={heroImgs[2]} alt="" className="w-full h-full object-cover" />
+                </div>
+                {/* Foto 4 — grande derecha abajo */}
+                <div className="absolute right-0 bottom-0 w-[47%] h-[60%] rounded-3xl overflow-hidden shadow-brand ring-4 ring-white/80">
+                  <img src={heroImgs[3]} alt="" className="w-full h-full object-cover" />
+                </div>
+                {/* Badge central flotante */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-white rounded-2xl shadow-brand px-4 py-3 text-center border border-brand-100 backdrop-blur-sm">
+                  <p className="text-2xl leading-none">🌸</p>
+                  <p className="text-[10px] font-bold text-brand-500 mt-1 whitespace-nowrap leading-tight">Hecho con<br/>Amor</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-brand-400 animate-bounce">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-brand-400 animate-bounce">
           <ChevronDown size={20} />
         </div>
       </section>
