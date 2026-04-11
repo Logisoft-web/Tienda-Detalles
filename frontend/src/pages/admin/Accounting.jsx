@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Plus, TrendingUp, TrendingDown, DollarSign, X, Package, Truck, Megaphone, Users, ShoppingBag, Wrench } from 'lucide-react'
+import { Plus, TrendingUp, TrendingDown, X, Trash2 } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts'
 import { api } from '../../lib/api'
 import toast from 'react-hot-toast'
@@ -52,6 +52,15 @@ export default function AdminAccounting() {
       setModal(false)
       setForm({ type: 'income', category: '', amount: '', description: '', date: new Date().toISOString().split('T')[0] })
       toast.success('Registrado 💰')
+    } catch (err) { toast.error(err.message) }
+  }
+
+  const handleDelete = async (id) => {
+    if (!confirm('¿Eliminar este registro contable?')) return
+    try {
+      await api.deleteTransaction(id)
+      await load()
+      toast.success('Registro eliminado')
     } catch (err) { toast.error(err.message) }
   }
 
@@ -188,13 +197,13 @@ export default function AdminAccounting() {
       <div className="hidden md:block bg-white rounded-2xl shadow-sm overflow-hidden border border-brand-50">
         <table className="w-full text-sm">
           <thead className="bg-brand-50 text-brand-700">
-            <tr>{['Fecha', 'Tipo', 'Categoría', 'Descripción', 'Monto'].map(h => (
+            <tr>{['Fecha', 'Tipo', 'Categoría', 'Descripción', 'Monto', ''].map(h => (
               <th key={h} className="text-left px-4 py-3 font-bold text-xs">{h}</th>
             ))}</tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {filtered.length === 0 ? (
-              <tr><td colSpan={5} className="text-center py-10 text-gray-300 text-sm">Sin registros</td></tr>
+              <tr><td colSpan={6} className="text-center py-10 text-gray-300 text-sm">Sin registros</td></tr>
             ) : filtered.map(t => (
               <tr key={t.id} className="hover:bg-brand-50/30 transition-colors">
                 <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{t.date?.slice(0, 10)}</td>
@@ -207,6 +216,12 @@ export default function AdminAccounting() {
                 <td className="px-4 py-3 text-gray-500 text-xs max-w-xs truncate">{t.description || '—'}</td>
                 <td className={`px-4 py-3 font-bold text-sm ${t.type === 'income' ? 'text-green-600' : 'text-red-500'}`}>
                   {t.type === 'income' ? '+' : '-'}{fmt(t.amount)}
+                </td>
+                <td className="px-4 py-3">
+                  <button onClick={() => handleDelete(t.id)}
+                    className="text-gray-300 hover:text-red-400 transition-colors">
+                    <Trash2 size={14} />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -228,6 +243,9 @@ export default function AdminAccounting() {
             <span className={`font-bold text-sm flex-shrink-0 ${t.type === 'income' ? 'text-green-600' : 'text-red-500'}`}>
               {t.type === 'income' ? '+' : '-'}{fmt(t.amount)}
             </span>
+            <button onClick={() => handleDelete(t.id)} className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
+              <Trash2 size={14} />
+            </button>
           </div>
         ))}
         {filtered.length === 0 && (

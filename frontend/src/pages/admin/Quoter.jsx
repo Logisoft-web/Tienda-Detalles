@@ -212,8 +212,9 @@ export default function AdminQuoter() {
 
           <div className="flex items-center justify-between bg-brand-50 rounded-xl px-4 py-3">
             <span className="font-bold text-gray-700">Total estimado</span>
-            <span className="font-bold text-brand-600 text-xl">{fmt(total)}</span>
+            <span className="font-bold text-brand-600 text-xl">${fmt(total)}</span>
           </div>
+          <p className="text-xs text-gray-400 -mt-2">* El precio final se define al confirmar la cotización</p>
 
           <div className="flex gap-3">
             <button type="button" onClick={() => setShowForm(false)}

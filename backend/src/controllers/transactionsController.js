@@ -21,6 +21,16 @@ export async function create(req, res) {
   } catch (err) { res.status(500).json({ error: err.message }) }
 }
 
+export async function remove(req, res) {
+  const { id } = req.params
+  try {
+    const { rowCount } = await pool.query('DELETE FROM transactions WHERE id=$1', [id])
+    if (!rowCount) return res.status(404).json({ error: 'No encontrado' })
+    await audit(req.user, 'eliminar_transaccion', 'transactions', parseInt(id), `id: ${id}`)
+    res.json({ ok: true })
+  } catch (err) { res.status(500).json({ error: err.message }) }
+}
+
 export async function getSummary(req, res) {
   try {
     const { rows } = await pool.query(`

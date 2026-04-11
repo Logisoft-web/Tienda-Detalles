@@ -3,15 +3,18 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
 import 'moment/locale/es'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import { Plus, X, Calendar as CalIcon, CheckCircle, Clock, AlertCircle, DollarSign } from 'lucide-react'
+import { Plus, X, Calendar as CalIcon, CheckCircle, AlertCircle, DollarSign } from 'lucide-react'
 import { api } from '../../lib/api'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
+// Forzar locale español ANTES de crear el localizer
 moment.locale('es')
 const localizer = momentLocalizer(moment)
+
 const COLORS = ['#e91e8c', '#e8b923', '#ff80aa', '#c4006e', '#9a0055', '#ff4d88']
+
 const MESSAGES = {
   today: 'Hoy', previous: '‹', next: '›',
   month: 'Mes', week: 'Semana', day: 'Día', agenda: 'Agenda',
@@ -19,21 +22,23 @@ const MESSAGES = {
   noEventsInRange: 'Sin eventos en este rango',
   showMore: n => `+${n} más`, allDay: 'Todo el día',
 }
+
+// Usar strings de formato moment — moment ya tiene locale 'es' activo
 const FORMATS = {
-  dayFormat: 'DD ddd',
-  weekdayFormat: (date, culture, loc) => loc.format(date, 'dddd', culture),
-  dayHeaderFormat: (date, culture, loc) => loc.format(date, 'dddd DD [de] MMMM', culture),
-  dayRangeHeaderFormat: ({ start, end }, culture, loc) =>
-    `${loc.format(start, 'DD MMM', culture)} – ${loc.format(end, 'DD MMM', culture)}`,
+  weekdayFormat: 'ddd',          // Dom, Lun, Mar...
+  dayFormat: 'ddd DD',           // lun 11
+  dayHeaderFormat: 'dddd DD [de] MMMM',
+  monthHeaderFormat: 'MMMM YYYY',
+  dayRangeHeaderFormat: ({ start, end }) =>
+    `${moment(start).format('DD MMM')} – ${moment(end).format('DD MMM')}`,
 }
 
 const fmt = n => `$${Number(n || 0).toLocaleString('es-CO')}`
-
 const EMPTY_FORM = { title: '', client_name: '', color: COLORS[0], notes: '', total_value: '', amount_paid: '' }
 
 export default function AdminCalendar() {
   const [events, setEvents] = useState([])
-  const [modal, setModal] = useState(null) // { mode: 'add'|'view', date?, event? }
+  const [modal, setModal] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [view, setView] = useState(Views.MONTH)
   const [loading, setLoading] = useState(true)
@@ -48,7 +53,7 @@ export default function AdminCalendar() {
   useEffect(() => { load() }, [])
 
   const handleSelectSlot = useCallback(({ start }) => {
-    setForm({ ...EMPTY_FORM, event_date: start.toISOString() })
+    setForm({ ...EMPTY_FORM })
     setModal({ mode: 'add', date: start })
   }, [])
 
@@ -68,33 +73,26 @@ export default function AdminCalendar() {
         amount_paid: form.amount_paid ? parseFloat(form.amount_paid) : 0,
       }
       const newEvent = await api.createEvent(payload)
-
       if (payload.amount_paid > 0) {
         const saldo = payload.total_value ? payload.total_value - payload.amount_paid : 0
         await api.createTransaction({
-          type: 'income',
-          category: 'Venta detalle',
-          amount: payload.amount_paid,
+          type: 'income', category: 'Venta detalle', amount: payload.amount_paid,
           description: `${saldo > 0 ? 'Abono' : 'Pago'}: ${form.title}${form.client_name ? ` — ${form.client_name}` : ''}${saldo > 0 ? ` (saldo: ${fmt(saldo)})` : ''}`,
           date: modal.date.toISOString().slice(0, 10),
           event_id: newEvent.id,
         })
       }
-
-      await load()
-      setModal(null)
-      setForm(EMPTY_FORM)
+      await load(); setModal(null); setForm(EMPTY_FORM)
       toast.success('Evento guardado 🎀')
     } catch (err) { toast.error(err.message) }
     finally { setSaving(false) }
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Eliminar este evento?')) return
+    if (!confirm('¿Eliminar este evento? También se eliminarán sus registros contables.')) return
     try {
       await api.deleteEvent(id)
-      await load()
-      setModal(null)
+      await load(); setModal(null)
       toast.success('Evento eliminado')
     } catch (err) { toast.error(err.message) }
   }
@@ -111,26 +109,20 @@ export default function AdminCalendar() {
       await api.updateEventPayment(ev.id, newPaid)
       const saldo = total > 0 ? total - newPaid : 0
       await api.createTransaction({
-        type: 'income',
-        category: 'Venta detalle',
-        amount,
+        type: 'income', category: 'Venta detalle', amount,
         description: `${saldo > 0 ? 'Abono' : 'Pago final'}: ${ev.title}${ev.client_name ? ` — ${ev.client_name}` : ''}${saldo > 0 ? ` (saldo: ${fmt(saldo)})` : ' ✅ Saldado'}`,
         date: ev.event_date?.slice(0, 10) || new Date().toISOString().slice(0, 10),
         event_id: ev.id,
       })
       toast.success(saldo > 0 ? `💰 Abono registrado. Saldo: ${fmt(saldo)}` : '✅ Evento saldado completamente')
-      setAbonoAmount('')
-      await load()
-      setModal(null)
+      setAbonoAmount(''); await load(); setModal(null)
     } catch (err) { toast.error(err.message) }
     finally { setSaving(false) }
   }
 
   const upcoming = [...events].sort((a, b) => a.start - b.start).filter(e => e.start >= new Date())
-
   if (loading) return <div className="flex items-center justify-center h-64 text-brand-400">Cargando...</div>
 
-  // Datos del evento en vista
   const ev = modal?.mode === 'view' ? modal.event : null
   const evTotal = ev ? Number(ev.total_value || 0) : 0
   const evPaid = ev ? Number(ev.amount_paid || 0) : 0
@@ -144,7 +136,7 @@ export default function AdminCalendar() {
           <h1 className="font-script text-3xl text-rose-600">Calendario</h1>
           <p className="text-gray-400 text-sm">Gestiona tus eventos y pagos</p>
         </div>
-        <button onClick={() => { setForm({ ...EMPTY_FORM, event_date: new Date().toISOString() }); setModal({ mode: 'add', date: new Date() }) }}
+        <button onClick={() => { setForm(EMPTY_FORM); setModal({ mode: 'add', date: new Date() }) }}
           className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-colors shadow-sm">
           <Plus size={16} /> Nuevo
         </button>
@@ -152,15 +144,22 @@ export default function AdminCalendar() {
 
       {/* Calendario desktop */}
       <div className="hidden md:block bg-white rounded-2xl p-4 shadow-sm" style={{ height: 560 }}>
-        <Calendar localizer={localizer} events={events} startAccessor="start" endAccessor="end"
-          view={view} onView={setView} onSelectSlot={handleSelectSlot} onSelectEvent={handleSelectEvent}
-          selectable messages={MESSAGES} culture="es" formats={FORMATS}
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start" endAccessor="end"
+          view={view} onView={setView}
+          onSelectSlot={handleSelectSlot} onSelectEvent={handleSelectEvent}
+          selectable
+          messages={MESSAGES}
+          formats={FORMATS}
           eventPropGetter={e => {
             const saldo = Number(e.total_value || 0) - Number(e.amount_paid || 0)
             const hasSaldo = e.total_value && saldo > 0
             return { style: { backgroundColor: e.color, border: hasSaldo ? '2px solid #f59e0b' : 'none', borderRadius: 6 } }
           }}
-          style={{ height: '100%' }} />
+          style={{ height: '100%' }}
+        />
       </div>
 
       {/* Timeline móvil */}
@@ -194,11 +193,10 @@ export default function AdminCalendar() {
         })}
       </div>
 
-      {/* ── Modal crear/ver evento ── */}
+      {/* Modal */}
       {modal && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-end sm:items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl max-h-[92vh] overflow-y-auto">
-            {/* Header */}
             <div className="flex items-center justify-between p-6 pb-3">
               <div className="flex items-center gap-3">
                 {modal.mode === 'view' && ev && (
@@ -218,7 +216,6 @@ export default function AdminCalendar() {
               <button onClick={() => setModal(null)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
 
-            {/* ── MODO CREAR ── */}
             {modal.mode === 'add' && (
               <div className="px-6 pb-6 space-y-4">
                 <input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
@@ -230,41 +227,29 @@ export default function AdminCalendar() {
                 <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
                   placeholder="Notas..." rows={2}
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-400 resize-none" />
-
-                {/* Valores */}
                 <div className="bg-brand-50 rounded-2xl p-4 space-y-3">
                   <p className="text-xs font-bold text-brand-600 uppercase tracking-wide">💰 Información de pago</p>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-xs text-gray-500 mb-1 block">Precio total</label>
                       <input type="number" min="0" value={form.total_value}
-                        onChange={e => setForm(f => ({ ...f, total_value: e.target.value }))}
-                        placeholder="0"
+                        onChange={e => setForm(f => ({ ...f, total_value: e.target.value }))} placeholder="0"
                         className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-brand-400 bg-white" />
                     </div>
                     <div>
                       <label className="text-xs text-gray-500 mb-1 block">Abono del cliente</label>
                       <input type="number" min="0" value={form.amount_paid}
-                        onChange={e => setForm(f => ({ ...f, amount_paid: e.target.value }))}
-                        placeholder="0"
+                        onChange={e => setForm(f => ({ ...f, amount_paid: e.target.value }))} placeholder="0"
                         className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-brand-400 bg-white" />
                     </div>
                   </div>
-                  {/* Saldo automático */}
                   <div className="bg-white rounded-xl px-4 py-2.5 flex justify-between items-center border border-brand-100">
                     <span className="text-xs text-gray-500 font-bold">Queda debiendo:</span>
-                    <span className={`text-sm font-bold ${
-                      form.total_value && Number(form.total_value) - Number(form.amount_paid || 0) > 0
-                        ? 'text-amber-600' : 'text-green-600'
-                    }`}>
-                      {form.total_value
-                        ? fmt(Math.max(0, Number(form.total_value) - Number(form.amount_paid || 0)))
-                        : '—'}
+                    <span className={`text-sm font-bold ${form.total_value && Number(form.total_value) - Number(form.amount_paid || 0) > 0 ? 'text-amber-600' : 'text-green-600'}`}>
+                      {form.total_value ? fmt(Math.max(0, Number(form.total_value) - Number(form.amount_paid || 0))) : '—'}
                     </span>
                   </div>
                 </div>
-
-                {/* Color */}
                 <div>
                   <p className="text-xs text-gray-500 mb-2">Color</p>
                   <div className="flex gap-2">
@@ -275,7 +260,6 @@ export default function AdminCalendar() {
                     ))}
                   </div>
                 </div>
-
                 <button onClick={handleSave} disabled={saving}
                   className="w-full bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-white font-bold py-3 rounded-xl transition-colors">
                   {saving ? 'Guardando...' : 'Guardar evento'}
@@ -283,35 +267,28 @@ export default function AdminCalendar() {
               </div>
             )}
 
-            {/* ── MODO VER ── */}
             {modal.mode === 'view' && ev && (
               <div className="px-6 pb-6 space-y-4">
-                {/* Info básica */}
                 <div className="bg-gray-50 rounded-2xl p-4 space-y-2 border border-gray-100">
                   {ev.client_name && (
                     <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <span className="text-base">👤</span>
-                      <span className="font-bold">{ev.client_name}</span>
+                      <span>👤</span><span className="font-bold">{ev.client_name}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span className="text-base">📅</span>
+                    <span>📅</span>
                     <span>{format(new Date(ev.event_date), "dd 'de' MMMM 'de' yyyy", { locale: es })}</span>
                   </div>
                   {ev.notes && (
                     <div className="flex items-start gap-2 text-sm text-gray-500">
-                      <span className="text-base">📝</span>
-                      <span>{ev.notes}</span>
+                      <span>📝</span><span>{ev.notes}</span>
                     </div>
                   )}
                 </div>
 
-                {/* Panel de pagos — solo si tiene valor */}
                 {evTotal > 0 ? (
                   <div className="space-y-3">
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">💰 Estado de pago</p>
-
-                    {/* Tarjetas precio / abonado / saldo */}
                     <div className="grid grid-cols-3 gap-2 text-center">
                       <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
                         <p className="text-xs text-gray-400 mb-1">Precio</p>
@@ -323,34 +300,24 @@ export default function AdminCalendar() {
                       </div>
                       <div className={`rounded-xl p-3 shadow-sm ${evSaldo > 0 ? 'bg-amber-50' : 'bg-green-50'}`}>
                         <p className="text-xs text-gray-400 mb-1">Debe</p>
-                        <p className={`font-bold text-sm ${evSaldo > 0 ? 'text-amber-600' : 'text-green-600'}`}>
-                          {fmt(evSaldo)}
-                        </p>
+                        <p className={`font-bold text-sm ${evSaldo > 0 ? 'text-amber-600' : 'text-green-600'}`}>{fmt(evSaldo)}</p>
                       </div>
                     </div>
-
-                    {/* Barra de progreso */}
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full transition-all"
-                        style={{ width: `${evPct}%` }} />
+                      <div className="bg-green-500 h-2 rounded-full transition-all" style={{ width: `${evPct}%` }} />
                     </div>
                     <p className="text-xs text-center text-gray-400">{evPct}% pagado</p>
 
-                    {/* Sección abono inline — solo si debe algo */}
                     {evSaldo > 0 ? (
                       <div className="bg-amber-50 rounded-2xl p-4 space-y-3 border border-amber-100">
                         <p className="text-xs font-bold text-amber-700 uppercase tracking-wide flex items-center gap-1">
                           <DollarSign size={12} /> Registrar abono
                         </p>
                         <div className="flex gap-2">
-                          <input
-                            type="number" min="0" value={abonoAmount}
-                            onChange={e => setAbonoAmount(e.target.value)}
-                            placeholder="Monto a abonar"
-                            className="flex-1 border border-amber-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-amber-400 bg-white"
-                          />
-                          <button
-                            onClick={() => setAbonoAmount(String(evSaldo))}
+                          <input type="number" min="0" value={abonoAmount}
+                            onChange={e => setAbonoAmount(e.target.value)} placeholder="Monto a abonar"
+                            className="flex-1 border border-amber-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-amber-400 bg-white" />
+                          <button onClick={() => setAbonoAmount(String(evSaldo))}
                             className="text-xs bg-white border border-amber-200 text-amber-700 font-bold px-3 rounded-xl hover:bg-amber-100 whitespace-nowrap">
                             Todo
                           </button>
@@ -374,8 +341,7 @@ export default function AdminCalendar() {
                   </div>
                 ) : (
                   <div className="bg-brand-50 rounded-xl p-3 flex items-center gap-2 text-brand-600 text-xs">
-                    <AlertCircle size={14} />
-                    Este evento no tiene valor registrado
+                    <AlertCircle size={14} /> Este evento no tiene valor registrado
                   </div>
                 )}
 

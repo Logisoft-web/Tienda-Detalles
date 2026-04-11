@@ -36,12 +36,14 @@ export const api = {
   // Events
   getEvents:    ()      => request('/events'),
   createEvent:  (body)  => request('/events',              { method: 'POST',   body: JSON.stringify(body) }),
+  updateEventPayment: (id, amount_paid) => request(`/events/${id}/payment`, { method: 'PATCH', body: JSON.stringify({ amount_paid }) }),
   deleteEvent:  (id)    => request(`/events/${id}`,        { method: 'DELETE' }),
 
   // Transactions
   getTransactions:    ()      => request('/transactions'),
   getSummary:         ()      => request('/transactions/summary'),
   createTransaction:  (body)  => request('/transactions',  { method: 'POST',   body: JSON.stringify(body) }),
+  deleteTransaction:  (id)    => request(`/transactions/${id}`, { method: 'DELETE' }),
 
   // Users (solo superadmin)
   getUsers:     ()      => request('/users'),
