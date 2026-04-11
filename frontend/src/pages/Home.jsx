@@ -244,12 +244,12 @@ export default function Home() {
             <div className="w-16 h-0.5 bg-brand-400 mx-auto mt-4" />
           </div>
 
-          <div className="columns-2 md:columns-3 lg:columns-4 gap-3 space-y-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {gallery.map((url, i) => (
               <button key={i} onClick={() => setLightbox({ src: url, label: '' })}
-                className="break-inside-avoid w-full rounded-xl overflow-hidden shadow-sm hover:shadow-brand transition-all duration-300 hover:-translate-y-1 block">
+                className="w-full rounded-xl overflow-hidden shadow-sm hover:shadow-brand transition-all duration-300 hover:-translate-y-1 block aspect-square">
                 <img src={url} alt=""
-                  className="w-full object-cover hover:scale-105 transition-transform duration-500" />
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </button>
             ))}
           </div>
