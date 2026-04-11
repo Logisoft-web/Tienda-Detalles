@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <>
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-hero-gradient">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-hero-gradient">
         {/* Fondo decorativo */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-brand-300/20 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
@@ -53,7 +53,7 @@ export default function Home() {
           <div className="absolute bottom-32 right-20 w-3 h-3 bg-brand-200 rounded-full opacity-50" />
         </div>
 
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-0 min-h-screen flex items-center">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-0 min-h-[90vh] flex items-center">
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
 
             {/* ── Texto ── */}
@@ -110,7 +110,7 @@ export default function Home() {
               </div>
 
               {/* Desktop: mosaico asimétrico */}
-              <div className="hidden lg:block relative h-[580px]">
+              <div className="hidden lg:block relative h-[500px]">
                 {/* Foto 1 — grande izquierda arriba */}
                 <div className="absolute left-0 top-0 w-[47%] h-[60%] rounded-3xl overflow-hidden shadow-brand ring-4 ring-white/80">
                   <img src={heroImgs[0]} alt="" className="w-full h-full object-cover" />
