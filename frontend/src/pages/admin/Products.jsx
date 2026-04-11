@@ -93,7 +93,7 @@ export default function Products() {
           <div key={p.id} className="bg-white rounded-2xl shadow-sm border border-brand-100 overflow-hidden">
             <div className="h-40 bg-gray-50 relative">
               {p.image_url
-                ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" />
+                ? <img src={p.image_url} alt={p.name} className="w-full h-full object-contain" />
                 : <div className="flex items-center justify-center h-full text-gray-200 text-4xl">🌸</div>
               }
               <span className="absolute top-2 left-2 bg-white/90 text-xs px-2 py-0.5 rounded-full text-brand-600 font-bold">
