@@ -120,7 +120,7 @@ export default function Home() {
   return (
     <>
       {/* ── HERO ── */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-hero-gradient">
+      <section className="relative overflow-hidden bg-hero-gradient">
         {/* Fondo decorativo */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-brand-300/20 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
@@ -130,7 +130,7 @@ export default function Home() {
           <div className="absolute bottom-32 right-20 w-3 h-3 bg-brand-200 rounded-full opacity-50" />
         </div>
 
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-0 min-h-[90vh] flex items-center">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 lg:pt-12 lg:pb-16 flex items-center">
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">            {/* ── Texto ── */}
             <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left items-center lg:items-start">
               <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-1.5 rounded-full text-brand-500 text-xs font-body tracking-widest uppercase mb-6 shadow-sm w-fit">
