@@ -117,7 +117,7 @@ export default function SiteEditor() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-4 gap-3">
             {[0,1,2,3].map(i => (
               <div key={i} onClick={() => setPicker({ key: 'hero', index: i })}
                 className="group relative rounded-2xl overflow-hidden border-2 border-dashed border-brand-200 bg-brand-50/30 cursor-pointer hover:border-brand-400 hover:bg-brand-50 transition-all"
