@@ -40,8 +40,6 @@ export default function Home() {
   const gallery  = cfg.gallery_images?.length   ? cfg.gallery_images : DEFAULT_CONFIG.gallery_images
   const testimonials = cfg.testimonials?.length  ? cfg.testimonials  : DEFAULT_CONFIG.testimonials
 
-  const filtered = cat === 'todos' ? services : services.filter(s => s.category === cat)
-
   return (
     <>
       {/* ── HERO ── */}
