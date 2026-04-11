@@ -49,4 +49,19 @@ export const api = {
   toggleUser:   (id)    => request(`/users/${id}/toggle`,  { method: 'PATCH' }),
   deleteUser:   (id)    => request(`/users/${id}`,         { method: 'DELETE' }),
   getAuditLog:  ()      => request('/users/audit'),
+
+  // Site config
+  getSiteConfig:  ()         => request('/site/config'),
+  updateSiteConfig:(key,val) => request('/site/config', { method: 'PUT', body: JSON.stringify({ key, value: val }) }),
+  getMedia:       ()         => request('/site/media'),
+  deleteMedia:    (id)       => request(`/site/media/${id}`, { method: 'DELETE' }),
+  uploadMedia: (file) => {
+    const form = new FormData()
+    form.append('image', file)
+    return fetch(`${BASE}/site/media`, {
+      method: 'POST',
+      headers: { ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
+      body: form,
+    }).then(r => r.json().then(d => { if (!r.ok) throw new Error(d.error); return d }))
+  },
 }

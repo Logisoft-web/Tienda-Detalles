@@ -1,6 +1,6 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { LayoutDashboard, CalendarDays, FileText, DollarSign, LogOut, Heart, Menu, X, Users } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, FileText, DollarSign, LogOut, Heart, Menu, X, Users, Settings } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import clsx from 'clsx'
 
@@ -12,7 +12,8 @@ const NAV = [
 ]
 
 const NAV_SUPER = [
-  { to: '/admin/users', label: 'Usuarios', icon: Users },
+  { to: '/admin/site',  label: 'Editor Web', icon: Settings },
+  { to: '/admin/users', label: 'Usuarios',   icon: Users },
 ]
 
 export default function AdminLayout() {

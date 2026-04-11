@@ -12,30 +12,33 @@ const CAT_LABELS  = {
   regalos:   '🎁 Regalos',
 }
 
-// Galería con las fotos reales
-const GALERIA = [
-  { src: '/galeria/flores-eternas-01.jpg', label: 'Flores Eternas' },
-  { src: '/galeria/peluche-01.jpg',        label: 'Peluches' },
-  { src: '/galeria/regalo-01.jpg',         label: 'Regalos' },
-  { src: '/galeria/accesorio-01.jpg',      label: 'Accesorios' },
-  { src: '/galeria/detalle-01.jpg',        label: 'Detalles' },
-  { src: '/galeria/flores-eternas-02.jpg', label: 'Flores Eternas' },
-  { src: '/galeria/arreglo-floral-03.jpg', label: 'Arreglo Floral' },
-  { src: '/galeria/peluche-02.jpg',        label: 'Peluches' },
-  { src: '/galeria/regalo-02.jpg',         label: 'Regalos' },
-  { src: '/galeria/accesorio-02.jpg',      label: 'Accesorios' },
-  { src: '/galeria/detalle-02.jpg',        label: 'Detalles' },
-  { src: '/galeria/arreglo-floral-04.jpg', label: 'Arreglo Floral' },
-]
+const DEFAULT_CONFIG = {
+  hero_title:    'Detalles que enamoran',
+  hero_subtitle: 'Flores eternas, peluches y accesorios únicos para cada ocasión especial. Porque los mejores momentos merecen el mejor detalle.',
+  hero_images:   ['/galeria/flores-eternas-01.jpg','/galeria/peluche-01.jpg','/galeria/arreglo-floral-03.jpg','/galeria/regalo-01.jpg'],
+  gallery_images:['/galeria/flores-eternas-01.jpg','/galeria/peluche-01.jpg','/galeria/regalo-01.jpg','/galeria/accesorio-01.jpg','/galeria/detalle-01.jpg','/galeria/flores-eternas-02.jpg','/galeria/arreglo-floral-03.jpg','/galeria/peluche-02.jpg','/galeria/regalo-02.jpg','/galeria/accesorio-02.jpg','/galeria/detalle-02.jpg','/galeria/arreglo-floral-04.jpg'],
+  testimonials:  [
+    { name: 'Laura M.',     text: 'Las flores eternas son hermosas, llevan meses y siguen perfectas. Un regalo increíble.', stars: 5 },
+    { name: 'Carlos R.',    text: 'Compré un peluche para el cumpleaños de mi novia y quedó encantada. Muy buena calidad.', stars: 5 },
+    { name: 'Valentina P.', text: 'Los accesorios son únicos, no los encuentras en otro lado. Siempre vuelvo a comprar.', stars: 5 },
+  ],
+}
 
 export default function Home() {
   const [cat, setCat] = useState('todos')
   const [services, setServices] = useState([])
   const [lightbox, setLightbox] = useState(null)
+  const [cfg, setCfg] = useState(DEFAULT_CONFIG)
 
   useEffect(() => {
     api.getServices().then(setServices).catch(console.error)
+    api.getSiteConfig().then(c => setCfg({ ...DEFAULT_CONFIG, ...c })).catch(() => {})
   }, [])
+
+  const filtered = cat === 'todos' ? services : services.filter(s => s.category === cat)
+  const heroImgs = cfg.hero_images?.length >= 4 ? cfg.hero_images : DEFAULT_CONFIG.hero_images
+  const gallery  = cfg.gallery_images?.length   ? cfg.gallery_images : DEFAULT_CONFIG.gallery_images
+  const testimonials = cfg.testimonials?.length  ? cfg.testimonials  : DEFAULT_CONFIG.testimonials
 
   const filtered = cat === 'todos' ? services : services.filter(s => s.category === cat)
 
@@ -55,11 +58,11 @@ export default function Home() {
               San Gil, Santander
             </div>
             <h1 className="font-display text-5xl md:text-7xl text-dark leading-tight mb-4">
-              Detalles que<br />
-              <em className="text-brand-500 not-italic">enamoran</em>
+              {cfg.hero_title.split(' que ')[0]} que<br />
+              <em className="text-brand-500 not-italic">{cfg.hero_title.split(' que ')[1] || 'enamoran'}</em>
             </h1>
             <p className="font-body text-gray-500 text-lg mb-8 leading-relaxed max-w-md">
-              Flores eternas, peluches y accesorios únicos para cada ocasión especial. Porque los mejores momentos merecen el mejor detalle.
+              {cfg.hero_subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <a href="#servicios"
@@ -78,18 +81,18 @@ export default function Home() {
           <div className="hidden lg:grid grid-cols-2 gap-3 h-[480px]">
             <div className="flex flex-col gap-3">
               <div className="rounded-2xl overflow-hidden flex-1 shadow-brand">
-                <img src="/galeria/flores-eternas-01.jpg" alt="Flores eternas" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                <img src={heroImgs[0]} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="rounded-2xl overflow-hidden h-40 shadow-sm">
-                <img src="/galeria/peluche-01.jpg" alt="Peluches" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                <img src={heroImgs[1]} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
             </div>
             <div className="flex flex-col gap-3 mt-8">
               <div className="rounded-2xl overflow-hidden h-40 shadow-sm">
-                <img src="/galeria/arreglo-floral-03.jpg" alt="Arreglos" className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" />
+                <img src={heroImgs[2]} alt="" className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="rounded-2xl overflow-hidden flex-1 shadow-brand">
-                <img src="/galeria/regalo-01.jpg" alt="Regalos" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                <img src={heroImgs[3]} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
             </div>
           </div>
@@ -161,10 +164,10 @@ export default function Home() {
           </div>
 
           <div className="columns-2 md:columns-3 lg:columns-4 gap-3 space-y-3">
-            {GALERIA.map((img, i) => (
-              <button key={i} onClick={() => setLightbox(img)}
+            {gallery.map((url, i) => (
+              <button key={i} onClick={() => setLightbox({ src: url, label: '' })}
                 className="break-inside-avoid w-full rounded-xl overflow-hidden shadow-sm hover:shadow-brand transition-all duration-300 hover:-translate-y-1 block">
-                <img src={img.src} alt={img.label}
+                <img src={url} alt=""
                   className="w-full object-cover hover:scale-105 transition-transform duration-500" />
               </button>
             ))}
@@ -187,12 +190,8 @@ export default function Home() {
           <div className="w-16 h-0.5 bg-brand-400 mx-auto mt-4" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { name: 'Laura M.', text: 'Las flores eternas son hermosas, llevan meses y siguen perfectas. Un regalo increíble.', stars: 5 },
-            { name: 'Carlos R.', text: 'Compré un peluche para el cumpleaños de mi novia y quedó encantada. Muy buena calidad.', stars: 5 },
-            { name: 'Valentina P.', text: 'Los accesorios son únicos, no los encuentras en otro lado. Siempre vuelvo a comprar.', stars: 5 },
-          ].map(({ name, text, stars }) => (
-            <div key={name} className="bg-white rounded-2xl p-6 shadow-sm border border-brand-100">
+          {testimonials.map(({ name, text, stars }, idx) => (
+            <div key={idx} className="bg-white rounded-2xl p-6 shadow-sm border border-brand-100">
               <div className="flex gap-0.5 mb-4">
                 {Array.from({ length: stars }).map((_, i) => (
                   <Star key={i} size={14} className="fill-gold text-gold" />
@@ -250,7 +249,6 @@ export default function Home() {
           onClick={() => setLightbox(null)}>
           <img src={lightbox.src} alt={lightbox.label}
             className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl" />
-          <p className="absolute bottom-8 text-white/70 font-body text-sm">{lightbox.label}</p>
         </div>
       )}
     </>

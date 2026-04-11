@@ -67,6 +67,27 @@ CREATE TABLE IF NOT EXISTS audit_log (
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS media (
+  id         SERIAL PRIMARY KEY,
+  filename   VARCHAR(255) UNIQUE NOT NULL,
+  url        TEXT NOT NULL,
+  size       INTEGER,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS site_config (
+  key   VARCHAR(80) PRIMARY KEY,
+  value TEXT NOT NULL
+);
+
+INSERT INTO site_config (key, value) VALUES
+  ('hero_title',    'Detalles que enamoran'),
+  ('hero_subtitle', 'Flores eternas, peluches y accesorios únicos para cada ocasión especial. Porque los mejores momentos merecen el mejor detalle.'),
+  ('hero_images',   '["/galeria/flores-eternas-01.jpg","/galeria/peluche-01.jpg","/galeria/arreglo-floral-03.jpg","/galeria/regalo-01.jpg"]'),
+  ('gallery_images','["/galeria/flores-eternas-01.jpg","/galeria/peluche-01.jpg","/galeria/regalo-01.jpg","/galeria/accesorio-01.jpg","/galeria/detalle-01.jpg","/galeria/flores-eternas-02.jpg","/galeria/arreglo-floral-03.jpg","/galeria/peluche-02.jpg","/galeria/regalo-02.jpg","/galeria/accesorio-02.jpg","/galeria/detalle-02.jpg","/galeria/arreglo-floral-04.jpg"]'),
+  ('testimonials',  '[{"name":"Laura M.","text":"Las flores eternas son hermosas, llevan meses y siguen perfectas. Un regalo increíble.","stars":5},{"name":"Carlos R.","text":"Compré un peluche para el cumpleaños de mi novia y quedó encantada. Muy buena calidad.","stars":5},{"name":"Valentina P.","text":"Los accesorios son únicos, no los encuentras en otro lado. Siempre vuelvo a comprar.","stars":5}]')
+ON CONFLICT DO NOTHING;
+
 -- ── Datos de ejemplo ──────────────────────────────────────────
 INSERT INTO services (name, category, price, description, image_url) VALUES
   ('Flores Eternas Rosas',      'flores',    85000,  'Rosas preservadas que duran años sin perder su belleza natural',           '/galeria/flores-eternas-01.jpg'),
