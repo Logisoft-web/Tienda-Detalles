@@ -72,14 +72,9 @@ export default function AdminCalendar() {
 
   const handleSelectEvent = useCallback((event) => {
     setAbonoAmount('')
-    // Recargar el evento fresco desde la DB para tener el id correcto
-    api.getEvents().then(data => {
-      const fresh = data.find(e => e.id === event.id)
-      if (fresh) {
-        setModal({ mode: 'view', event: { ...fresh, start: new Date(fresh.event_date), end: new Date(fresh.event_date) } })
-      } else {
-        setModal({ mode: 'view', event })
-      }
+    // Obtener el evento fresco por id desde la DB
+    api.getEventById(event.id).then(fresh => {
+      setModal({ mode: 'view', event: { ...fresh, start: new Date(fresh.event_date), end: new Date(fresh.event_date) } })
     }).catch(() => setModal({ mode: 'view', event }))
   }, [])
 

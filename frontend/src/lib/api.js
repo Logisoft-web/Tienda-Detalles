@@ -37,6 +37,7 @@ export const api = {
 
   // Events
   getEvents:    ()      => request('/events'),
+  getEventById: (id)   => request(`/events/${id}`),
   createEvent:  (body)  => request('/events',              { method: 'POST',   body: JSON.stringify(body) }),
   updateEventPayment: (id, amount_paid) => request(`/events/${id}/payment`, { method: 'PATCH', body: JSON.stringify({ amount_paid }) }),
   deleteEvent:  (id)    => request(`/events/${id}`,        { method: 'DELETE' }),

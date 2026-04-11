@@ -22,15 +22,27 @@ export async function create(req, res) {
   } catch (err) { res.status(500).json({ error: err.message }) }
 }
 
+export async function getById(req, res) {
+  try {
+    const { rows } = await pool.query('SELECT * FROM events WHERE id=$1', [req.params.id])
+    if (!rows[0]) return res.status(404).json({ error: 'No encontrado' })
+    res.json(rows[0])
+  } catch (err) { res.status(500).json({ error: err.message }) }
+}
+
 export async function updatePayment(req, res) {
   const { id } = req.params
   const { amount_paid } = req.body
   try {
+    // Verificar primero que el evento existe
+    const { rows: check } = await pool.query('SELECT id FROM events WHERE id=$1', [id])
+    if (!check[0]) return res.status(404).json({ error: `Evento ${id} no encontrado` })
+
     const { rows } = await pool.query(
       'UPDATE events SET amount_paid=$1 WHERE id=$2 RETURNING *',
       [amount_paid, id]
     )
-    if (!rows[0]) return res.status(404).json({ error: 'No encontrado' })
+    if (!rows[0]) return res.status(404).json({ error: 'No se pudo actualizar' })
     await audit(req.user, 'actualizar_pago_evento', 'events', parseInt(id), `pagado: ${amount_paid}`)
     res.json(rows[0])
   } catch (err) { res.status(500).json({ error: err.message }) }
