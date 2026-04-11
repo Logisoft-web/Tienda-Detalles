@@ -9,9 +9,7 @@ import { es } from 'date-fns/locale'
 // Categorías específicas para Hecho con Amor
 const INCOME_CATS = [
   { value: 'Venta detalle',     label: '🎁 Venta de detalle',       color: '#e91e8c' },
-  { value: 'Domicilio',         label: '🛵 Domicilio',               color: '#ff80aa' },
-  { value: 'Personalización',   label: '✨ Personalización',         color: '#c4006e' },
-  { value: 'Otro ingreso',      label: '💰 Otro ingreso',            color: '#ffb3cc' },
+  { value: 'Venta detalle + envío', label: '🛵 Venta de detalle + envío', color: '#ff80aa' },
 ]
 const EXPENSE_CATS = [
   { value: 'Insumos directos',  label: '🌸 Insumos directos',       color: '#ef4444' },
