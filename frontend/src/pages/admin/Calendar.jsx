@@ -1,16 +1,15 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
-import 'moment/locale/es'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import 'moment/locale/es'
 import { Plus, X, Calendar as CalIcon, CheckCircle, AlertCircle, DollarSign } from 'lucide-react'
 import { api } from '../../lib/api'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
-// Forzar locale español ANTES de crear el localizer
-moment.locale('es')
+// moment.locale('es') ya se ejecuta en main.jsx globalmente
 const localizer = momentLocalizer(moment)
 
 const COLORS = ['#e91e8c', '#e8b923', '#ff80aa', '#c4006e', '#9a0055', '#ff4d88']
@@ -24,26 +23,12 @@ const MESSAGES = {
 }
 
 const FORMATS = {
-  // Estas funciones usan moment con locale 'es' ya activo
   weekdayFormat: (date, culture, loc) => loc.format(date, 'ddd', culture),
   dayFormat: (date, culture, loc) => loc.format(date, 'ddd DD', culture),
   dayHeaderFormat: (date, culture, loc) => loc.format(date, 'dddd DD [de] MMMM', culture),
   monthHeaderFormat: (date, culture, loc) => loc.format(date, 'MMMM YYYY', culture),
   dayRangeHeaderFormat: ({ start, end }, culture, loc) =>
     `${loc.format(start, 'DD MMM', culture)} – ${loc.format(end, 'DD MMM', culture)}`,
-}
-
-// El header de mes recibe { label } que ya viene formateado por weekdayFormat
-// Solo necesitamos capitalize porque moment en español devuelve minúsculas
-const MonthHeader = ({ label }) => (
-  <span style={{ textTransform: 'capitalize' }}>{label}</span>
-)
-
-const COMPONENTS = {
-  month: { header: MonthHeader },
-  week: { header: ({ date }) => (
-    <span style={{ textTransform: 'capitalize' }}>{moment(date).format('ddd DD')}</span>
-  )},
 }
 
 const fmt = n => `$${Number(n || 0).toLocaleString('es-CO')}`
@@ -169,7 +154,6 @@ export default function AdminCalendar() {
           selectable
           messages={MESSAGES}
           formats={FORMATS}
-          components={COMPONENTS}
           eventPropGetter={e => {
             const saldo = Number(e.total_value || 0) - Number(e.amount_paid || 0)
             const hasSaldo = e.total_value && saldo > 0
