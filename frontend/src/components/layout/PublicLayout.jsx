@@ -12,7 +12,7 @@ export default function PublicLayout() {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-brand-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src="/galeria/Logo.png" alt="Hecho con Amor" className="h-10 w-auto object-contain" />
+            <img src="/galeria/Logo.png" alt="Hecho con Amor" className="h-14 w-auto object-contain" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-8 text-sm font-body font-700 text-gray-600 tracking-wide">
