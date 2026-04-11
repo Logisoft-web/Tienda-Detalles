@@ -9,6 +9,7 @@ import AdminQuoter from './pages/admin/Quoter'
 import AdminAccounting from './pages/admin/Accounting'
 import AdminUsers from './pages/admin/Users'
 import AdminSiteEditor from './pages/admin/SiteEditor'
+import AdminProducts from './pages/admin/Products'
 import Login from './pages/Login'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 
@@ -33,6 +34,7 @@ export default function App() {
         {/* Admin */}
         <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
           <Route index element={<AdminDashboard />} />
+          <Route path="products" element={<AdminProducts />} />
           <Route path="calendar" element={<AdminCalendar />} />
           <Route path="quoter" element={<AdminQuoter />} />
           <Route path="accounting" element={<AdminAccounting />} />

@@ -1,11 +1,12 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { LayoutDashboard, CalendarDays, FileText, DollarSign, LogOut, Heart, Menu, X, Users, Settings } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, FileText, DollarSign, LogOut, Heart, Menu, X, Users, Settings, ShoppingBag } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import clsx from 'clsx'
 
 const NAV = [
   { to: '/admin',            label: 'Dashboard',    icon: LayoutDashboard, end: true },
+  { to: '/admin/products',   label: 'Productos',    icon: ShoppingBag },
   { to: '/admin/calendar',   label: 'Calendario',   icon: CalendarDays },
   { to: '/admin/quoter',     label: 'Cotizador',    icon: FileText },
   { to: '/admin/accounting', label: 'Contabilidad', icon: DollarSign },
