@@ -33,3 +33,22 @@ export async function updateStatus(req, res) {
     res.json(rows[0])
   } catch (err) { res.status(500).json({ error: err.message }) }
 }
+
+export async function remove(req, res) {
+  const { id } = req.params
+  try {
+    const { rows } = await pool.query('SELECT client_name FROM quotes WHERE id=$1', [id])
+    if (!rows[0]) return res.status(404).json({ error: 'No encontrado' })
+    await pool.query('DELETE FROM quotes WHERE id=$1', [id])
+    await audit(req.user, 'eliminar_cotizacion', 'quotes', parseInt(id), rows[0].client_name)
+    res.json({ ok: true })
+  } catch (err) { res.status(500).json({ error: err.message }) }
+}
+
+export async function clearHistory(req, res) {
+  try {
+    const { rowCount } = await pool.query("DELETE FROM quotes WHERE status IN ('confirmed','cancelled')")
+    await audit(req.user, 'limpiar_historial_cotizaciones', 'quotes', null, `${rowCount} eliminadas`)
+    res.json({ ok: true, deleted: rowCount })
+  } catch (err) { res.status(500).json({ error: err.message }) }
+}

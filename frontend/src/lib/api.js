@@ -29,9 +29,11 @@ export const api = {
   deleteService:  (id)    => request(`/services/${id}`,    { method: 'DELETE' }),
 
   // Quotes
-  getQuotes:        ()      => request('/quotes'),
-  createQuote:      (body)  => request('/quotes',          { method: 'POST',   body: JSON.stringify(body) }),
-  updateQuoteStatus:(id, s) => request(`/quotes/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: s }) }),
+  getQuotes:          ()      => request('/quotes'),
+  createQuote:        (body)  => request('/quotes',              { method: 'POST',   body: JSON.stringify(body) }),
+  updateQuoteStatus:  (id, s) => request(`/quotes/${id}/status`, { method: 'PATCH',  body: JSON.stringify({ status: s }) }),
+  deleteQuote:        (id)    => request(`/quotes/${id}`,        { method: 'DELETE' }),
+  clearQuoteHistory:  ()      => request('/quotes/history',      { method: 'DELETE' }),
 
   // Events
   getEvents:    ()      => request('/events'),

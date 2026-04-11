@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Plus, Send, ChevronDown, ChevronUp, CalendarDays, DollarSign, CheckCircle, Clock, X, History } from 'lucide-react'
+import { Plus, Send, ChevronDown, ChevronUp, CalendarDays, CheckCircle, Clock, X, History, Trash2 } from 'lucide-react'
 import { api } from '../../lib/api'
+import { useAuth } from '../../hooks/useAuth'
 import toast from 'react-hot-toast'
 
 const STATUS_COLORS = { pending: 'bg-amber-100 text-amber-700', confirmed: 'bg-green-100 text-green-700', cancelled: 'bg-red-100 text-red-600' }
@@ -15,6 +16,8 @@ export default function AdminQuoter() {
   const [expanded, setExpanded] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [showAll, setShowAll] = useState(false)
+  const { user } = useAuth()
+  const isSuperAdmin = user?.role === 'superadmin'
 
   // Modal confirmar → calendario
   const [confirmModal, setConfirmModal] = useState(null)
@@ -129,6 +132,25 @@ export default function AdminQuoter() {
       setPayForm({ amount: '', type: 'abono', category: 'Venta detalle', description: '' })
     } catch (err) { toast.error(err.message) }
     finally { setPaying(false) }
+  }
+
+  const handleDeleteQuote = async (id, clientName) => {
+    if (!confirm(`¿Eliminar la cotización de ${clientName}? Esta acción no se puede deshacer.`)) return
+    try {
+      await api.deleteQuote(id)
+      await load()
+      toast.success('Cotización eliminada')
+    } catch (err) { toast.error(err.message) }
+  }
+
+  const handleClearHistory = async () => {
+    if (!confirm(`¿Limpiar todo el historial? Se eliminarán todas las cotizaciones confirmadas y canceladas.`)) return
+    try {
+      const { deleted } = await api.clearQuoteHistory()
+      await load()
+      setShowAll(false)
+      toast.success(`Historial limpiado (${deleted} eliminadas)`)
+    } catch (err) { toast.error(err.message) }
   }
 
   const sendWhatsApp = (q) => {
@@ -283,12 +305,20 @@ export default function AdminQuoter() {
       {/* Historial (confirmadas/canceladas) */}
       {archivedQuotes.length > 0 && (
         <div className="space-y-2">
-          <button onClick={() => setShowAll(!showAll)}
-            className="flex items-center gap-2 text-xs text-gray-400 hover:text-gray-600 font-bold">
-            <History size={13} /> {showAll ? 'Ocultar' : 'Ver'} historial ({archivedQuotes.length})
-          </button>
+          <div className="flex items-center justify-between">
+            <button onClick={() => setShowAll(!showAll)}
+              className="flex items-center gap-2 text-xs text-gray-400 hover:text-gray-600 font-bold">
+              <History size={13} /> {showAll ? 'Ocultar' : 'Ver'} historial ({archivedQuotes.length})
+            </button>
+            {isSuperAdmin && (
+              <button onClick={handleClearHistory}
+                className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-600 font-bold">
+                <Trash2 size={12} /> Limpiar historial
+              </button>
+            )}
+          </div>
           {showAll && archivedQuotes.map(q => (
-            <div key={q.id} className="bg-gray-50 rounded-2xl border border-gray-100 px-4 py-3 flex items-center gap-3 opacity-70">
+            <div key={q.id} className="bg-gray-50 rounded-2xl border border-gray-100 px-4 py-3 flex items-center gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-gray-600 truncate">{q.client_name}</p>
@@ -296,7 +326,13 @@ export default function AdminQuoter() {
                 </div>
                 <p className="text-gray-400 text-xs">{q.event_date?.slice(0,10)} · {q.event_type || '—'}</p>
               </div>
-              <p className="text-sm font-bold text-gray-500 flex-shrink-0">{fmt(q.total)}</p>
+              <p className="text-sm font-bold text-gray-500 flex-shrink-0">${fmt(q.total)}</p>
+              {isSuperAdmin && (
+                <button onClick={() => handleDeleteQuote(q.id, q.client_name)}
+                  className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0 ml-1">
+                  <Trash2 size={14} />
+                </button>
+              )}
             </div>
           ))}
         </div>
