@@ -12,6 +12,9 @@ import { es } from 'date-fns/locale'
 // Locale español activo antes de crear el localizer
 moment.locale('es')
 const localizer = momentLocalizer(moment)
+localizer.formats.dayFormat = 'ddd DD'
+localizer.formats.weekdayFormat = 'ddd'
+localizer.formats.monthHeaderFormat = 'MMMM YYYY'
 
 const COLORS = ['#e91e8c', '#e8b923', '#ff80aa', '#c4006e', '#9a0055', '#ff4d88']
 
@@ -148,6 +151,7 @@ export default function AdminCalendar() {
       <div className="hidden md:block bg-white rounded-2xl p-4 shadow-sm" style={{ height: 560 }}>
         <Calendar
           localizer={localizer}
+          culture="es"
           events={events}
           startAccessor="start" endAccessor="end"
           view={view} onView={setView}
