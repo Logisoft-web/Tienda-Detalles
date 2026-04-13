@@ -1,20 +1,19 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
-import moment from 'moment'
-import 'moment/locale/es'
+import { Calendar, dateFnsLocalizer, Views } from 'react-big-calendar'
+import { format, parse, startOfWeek, getDay } from 'date-fns'
+import { es } from 'date-fns/locale'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { Plus, X, Calendar as CalIcon, CheckCircle, AlertCircle, DollarSign } from 'lucide-react'
 import { api } from '../../lib/api'
 import toast from 'react-hot-toast'
-import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
 
-// Locale español activo antes de crear el localizer
-moment.locale('es')
-const localizer = momentLocalizer(moment)
-localizer.formats.dayFormat = 'ddd DD'
-localizer.formats.weekdayFormat = 'ddd'
-localizer.formats.monthHeaderFormat = 'MMMM YYYY'
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek: () => startOfWeek(new Date(), { locale: es }),
+  getDay,
+  locales: { es },
+})
 
 const COLORS = ['#e91e8c', '#e8b923', '#ff80aa', '#c4006e', '#9a0055', '#ff4d88']
 
@@ -27,12 +26,12 @@ const MESSAGES = {
 }
 
 const FORMATS = {
-  weekdayFormat: (date) => moment(date).locale('es').format('ddd'),
-  dayFormat: (date) => moment(date).locale('es').format('ddd DD'),
-  dayHeaderFormat: (date) => moment(date).locale('es').format('dddd DD [de] MMMM'),
-  monthHeaderFormat: (date) => moment(date).locale('es').format('MMMM YYYY'),
+  weekdayFormat: (date, culture, loc) => loc.format(date, 'EEE', { locale: es }),
+  dayFormat: (date, culture, loc) => loc.format(date, 'EEE dd', { locale: es }),
+  dayHeaderFormat: (date, culture, loc) => loc.format(date, "EEEE dd 'de' MMMM", { locale: es }),
+  monthHeaderFormat: (date, culture, loc) => loc.format(date, 'MMMM yyyy', { locale: es }),
   dayRangeHeaderFormat: ({ start, end }) =>
-    `${moment(start).locale('es').format('DD MMM')} – ${moment(end).locale('es').format('DD MMM')}`,
+    `${format(start, 'dd MMM', { locale: es })} – ${format(end, 'dd MMM', { locale: es })}`,
 }
 
 const fmt = n => `$${Number(n || 0).toLocaleString('es-CO')}`
