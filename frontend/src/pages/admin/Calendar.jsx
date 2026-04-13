@@ -25,13 +25,16 @@ const MESSAGES = {
   showMore: n => `+${n} más`, allDay: 'Todo el día',
 }
 
+const DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb']
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+
 const FORMATS = {
-  weekdayFormat: (date, culture, loc) => loc.format(date, 'EEE', { locale: es }),
-  dayFormat: (date, culture, loc) => loc.format(date, 'EEE dd', { locale: es }),
-  dayHeaderFormat: (date, culture, loc) => loc.format(date, "EEEE dd 'de' MMMM", { locale: es }),
-  monthHeaderFormat: (date, culture, loc) => loc.format(date, 'MMMM yyyy', { locale: es }),
+  weekdayFormat: (date) => DIAS[date.getDay()],
+  dayFormat: (date) => `${DIAS[date.getDay()]} ${date.getDate()}`,
+  dayHeaderFormat: (date) => `${DIAS[date.getDay()]} ${date.getDate()} de ${MESES[date.getMonth()]}`,
+  monthHeaderFormat: (date) => `${MESES[date.getMonth()]} ${date.getFullYear()}`,
   dayRangeHeaderFormat: ({ start, end }) =>
-    `${format(start, 'dd MMM', { locale: es })} – ${format(end, 'dd MMM', { locale: es })}`,
+    `${start.getDate()} ${MESES[start.getMonth()]} – ${end.getDate()} ${MESES[end.getMonth()]}`,
 }
 
 const fmt = n => `$${Number(n || 0).toLocaleString('es-CO')}`
