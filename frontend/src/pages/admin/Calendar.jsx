@@ -27,12 +27,12 @@ const MESSAGES = {
 }
 
 const FORMATS = {
-  weekdayFormat: (date, culture, loc) => loc.format(date, 'ddd', culture),
-  dayFormat: (date, culture, loc) => loc.format(date, 'ddd DD', culture),
-  dayHeaderFormat: (date, culture, loc) => loc.format(date, 'dddd DD [de] MMMM', culture),
-  monthHeaderFormat: (date, culture, loc) => loc.format(date, 'MMMM YYYY', culture),
-  dayRangeHeaderFormat: ({ start, end }, culture, loc) =>
-    `${loc.format(start, 'DD MMM', culture)} – ${loc.format(end, 'DD MMM', culture)}`,
+  weekdayFormat: (date) => moment(date).locale('es').format('ddd'),
+  dayFormat: (date) => moment(date).locale('es').format('ddd DD'),
+  dayHeaderFormat: (date) => moment(date).locale('es').format('dddd DD [de] MMMM'),
+  monthHeaderFormat: (date) => moment(date).locale('es').format('MMMM YYYY'),
+  dayRangeHeaderFormat: ({ start, end }) =>
+    `${moment(start).locale('es').format('DD MMM')} – ${moment(end).locale('es').format('DD MMM')}`,
 }
 
 const fmt = n => `$${Number(n || 0).toLocaleString('es-CO')}`
